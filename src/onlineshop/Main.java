@@ -1,12 +1,12 @@
-package Task1;
+package onlineshop;
 
-import Task1.Model.Computer;
-import Task1.Model.Electronics;
-import Task1.Model.Smartphone;
+import onlineshop.model.Computer;
+import onlineshop.model.Electronics;
+import onlineshop.model.Smartphone;
 
 public class Main {
     public static void main(String[] args) {
-        Computer laptop = new Computer(1, "Laptop gejmingowy", 10_000, 69, "dobry", 0);
+        Computer laptop = new Computer(1, "Laptop gejmingowy", 10_000, 69, "", 0);
         laptop.configureSpecification();
 
         Smartphone phone = new Smartphone(2, "Samsung", 3000, 21, "", 2137);
@@ -14,6 +14,6 @@ public class Main {
 
         Electronics tv = new Electronics(3, "Telewizor FullHD", 5000, 1);
 
-        System.out.println("Produkt: " + tv.getName() + ", Cena: " + tv.getPrice());
+        tv.getInfo();
     }
 }

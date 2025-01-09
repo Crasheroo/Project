@@ -1,4 +1,4 @@
-package Task1.Model;
+package onlineshop.model;
 
 public class Product {
     private int id;
@@ -12,6 +12,8 @@ public class Product {
         this.price = price;
         this.amountOfAvailable = amountOfAvailable;
     }
+
+    public void getInfo() {}
 
     public int getId() {
         return id;
@@ -44,4 +46,5 @@ public class Product {
     public void setAmountOfAvailable(int amountOfAvailable) {
         this.amountOfAvailable = amountOfAvailable;
     }
+
 }
