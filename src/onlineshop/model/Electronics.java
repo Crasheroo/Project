@@ -6,7 +6,7 @@ public class Electronics extends Product{
     }
 
     @Override
-    public void getInfo() {
-        System.out.println("Elektronika: ID: " + getId() + ", nazwa: " + getName() + ", cena: " + getPrice() + ", dostepnych sztuk: " + getAmountOfAvailable());
+    public String toString() {
+        return "Elektronika: ID: " + getId() + ", nazwa: " + getName() + ", cena: " + getPrice() + ", dostepnych sztuk: " + getAmountOfAvailable();
     }
 }

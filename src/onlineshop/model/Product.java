@@ -1,5 +1,7 @@
 package onlineshop.model;
 
+import java.util.Scanner;
+
 public class Product {
     private int id;
     private String name;

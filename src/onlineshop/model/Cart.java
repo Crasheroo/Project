@@ -35,7 +35,7 @@ public class Cart {
             System.err.println("Koszyk jest pusty.");
         } else {
             System.out.println("Produkty w koszyku:");
-            products.forEach(product -> product.getInfo());
+            products.forEach(System.out::println);
         }
     }
 

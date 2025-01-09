@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrdersSaving {
+public class OrderPersistance {
     private static final String FILE_NAME = "orders.txt";
 
     public synchronized void saveOrder(Order order) {
@@ -44,7 +44,9 @@ public class OrdersSaving {
         sb.append("Klient: ").append(order.getCustomerName()).append(" email: ").append(order.getCustomerEmail()).append("\n");
         sb.append("Data zamowienia: ").append(order.getOrderDate().format(formatter)).append("\n");
         sb.append("Produkty:\n");
-        order.getProducts().forEach(product -> product.getInfo());
+        order.getProducts()
+                        .forEach(product ->
+                                sb.append(product.getName()).append(", cena: ").append(product.getPrice()).append(" zł\n"));
         sb.append("Łączna kwota: ").append(order.getTotalPrice()).append(" zł\n");
         return sb.toString();
     }

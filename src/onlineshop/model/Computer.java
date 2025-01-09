@@ -13,19 +13,6 @@ public class Computer extends Product {
         this.amountOfRam = amountOfRam;
     }
 
-    public void configureSpecification() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Wybierz procesor: ");
-        processor = scanner.nextLine();
-
-        System.out.print("Wybierz ilość RAM (GB): ");
-        amountOfRam = scanner.nextInt();
-        scanner.nextLine();
-
-        getInfo();
-    }
-
     @Override
     public int hashCode() {
         return Objects.hash(processor, amountOfRam);
@@ -48,11 +35,6 @@ public class Computer extends Product {
     }
 
     @Override
-    public void getInfo() {
-        System.out.println("Komputer " + getName() + " z procesorem: " + processor + " i RAMem: " + amountOfRam + " GB, cena: " + getPrice());
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Computer computer)) return false;
@@ -61,9 +43,6 @@ public class Computer extends Product {
 
     @Override
     public String toString() {
-        return "Computer{" +
-                "processor='" + processor + '\'' +
-                ", amountOfRam=" + amountOfRam +
-                '}';
+        return "Komputer: ID: " + getId() + ", nazwa: " + getName() + ", cena: " + getPrice() + ", procesor: " + processor + ", ram: " + amountOfRam + " GB";
     }
 }

@@ -2,6 +2,7 @@ package onlineshop.model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,6 +25,10 @@ public class Order {
         this.orderDate = LocalDateTime.now();
     }
 
+    public static Order fromCart(int orderId, String customerName, String customerEmail, Cart cart) {
+        return new Order(orderId, customerName, customerEmail, new ArrayList<>(cart.getProducts()));
+    }
+
     public double calculateTotalPrice() {
         double total = products.stream()
                 .mapToDouble(product -> product.getPrice())
@@ -37,10 +42,12 @@ public class Order {
                 .sum();
 
         if (total >- discount.getMinimumOrderValue()) {
-            double percentageDiscount = total + discount.getPercentage();
+            double percentageDiscount = total * discount.getPercentage();
             double fixedDiscount = discount.getFixedAmount();
-            this.discountValue = Math.max(percentageDiscount, fixedDiscount);
+
+            this.discountValue = Math.min(total, Math.max(percentageDiscount, fixedDiscount));
             this.totalPrice = calculateTotalPrice();
+            System.out.println("Zastosowano rabat: " + this.discountValue + " zł");
         }
     }
 
@@ -50,7 +57,7 @@ public class Order {
         System.out.println("Klient: " + customerName + " email: " + customerEmail);
         System.out.println("Data zamówienia: " + orderDate.format(formatter));
         System.out.println("Produkty w zamówieniu:");
-        products.forEach(product -> product.getInfo());
+        products.forEach(System.out::println);
         System.out.println("Zastosowany rabat: " + discountValue + " zł");
         System.out.println("Łączna kwota zamówienia: " + totalPrice + " zł");
     }

@@ -17,33 +17,6 @@ public class Smartphone extends Product{
         this.accesories = new ArrayList<>();
     }
 
-    public void chooseSpecification() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Wybierz kolor: ");
-        color = scanner.nextLine();
-
-        System.out.print("Wybierz pojemność baterii (mAh): ");
-        batteryCapacity = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.println("Dodawanie akcesoriów. ('koniec', żeby zakończyć)\n");
-        while (true) {
-            System.out.print("Dodaj akcesorium: ");
-            String accesory = scanner.nextLine();
-            if (accesory.equalsIgnoreCase("koniec")) {
-                break;
-            }
-            accesories.add(accesory);
-        }
-        getInfo();
-    }
-
-    @Override
-    public void getInfo() {
-        System.out.println("Smartfon: " + getName() + " z kolorem " + color + ", baterią: " + batteryCapacity + " mAh i akcesoriami: " + accesories + ", cena: " + getPrice());
-    }
-
     public String getColor() {
         return color;
     }
@@ -82,10 +55,6 @@ public class Smartphone extends Product{
 
     @Override
     public String toString() {
-        return "Smartphone{" +
-                "color='" + color + '\'' +
-                ", batteryCapacity=" + batteryCapacity +
-                ", accesories=" + accesories +
-                '}';
+        return "Smartfon: ID: " + getId() + ", nazwa: " + getName() + " z kolorem " + color + ", baterią: " + batteryCapacity + " mAh i akcesoriami: " + accesories + ", cena: " + getPrice();
     }
 }
