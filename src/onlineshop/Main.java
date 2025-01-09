@@ -2,7 +2,6 @@ package onlineshop;
 
 import onlineshop.exceptions.ProductOutOfStockException;
 import onlineshop.model.*;
-import onlineshop.service.OrderProcessor;
 import onlineshop.service.ProductManager;
 
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ public class Main {
     public static void main(String[] args) {
         ProductManager productManager = new ProductManager();
         Cart cart = new Cart();
-        OrderProcessor orderProcessor = new OrderProcessor();
         Scanner scanner = new Scanner(System.in);
 
         productManager.addProduct(new Computer(1, "Laptop gejmingowy", 10000, 2, "", 6));
@@ -83,13 +81,13 @@ public class Main {
                         String email = scanner.nextLine();
 
                         Order order = new Order(generateOrderId(), name, email, new ArrayList<>(cart.getProducts()));
-                        orderProcessor.processOrder(order);
                         cart.clearCart();
                     }
                 }
 
                 case 6 -> {
                     System.out.println("Baj baj");
+                    scanner.close();
                     return;
                 }
 
@@ -106,6 +104,6 @@ public class Main {
     }
 
     private static int generateOrderId() {
-        return (int) (Math.random() + 1000);
+        return (int) (Math.random() * 1000);
     }
 }
