@@ -13,9 +13,7 @@ public class Product {
         this.amountOfAvailable = amountOfAvailable;
     }
 
-    public void getInfo() {
-
-    }
+    public void getInfo() {}
 
     public int getId() {
         return id;

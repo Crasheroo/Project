@@ -41,7 +41,7 @@ public class Smartphone extends Product{
 
     @Override
     public void getInfo() {
-        System.out.println("Smartfon: " + getName() + " z kolorem " + color + ", baterią: " + batteryCapacity + " mAh i akcesoriami: " + accesories);
+        System.out.println("Smartfon: " + getName() + " z kolorem " + color + ", baterią: " + batteryCapacity + " mAh i akcesoriami: " + accesories + ", cena: " + getPrice());
     }
 
     public String getColor() {

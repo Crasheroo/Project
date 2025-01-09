@@ -49,7 +49,7 @@ public class Computer extends Product {
 
     @Override
     public void getInfo() {
-        System.out.println("Komputer " + getName() + " z procesorem: " + processor + " i RAMem: " + amountOfRam + " GB");
+        System.out.println("Komputer " + getName() + " z procesorem: " + processor + " i RAMem: " + amountOfRam + " GB, cena: " + getPrice());
     }
 
     @Override
