@@ -79,6 +79,7 @@ public class Main {
 
                         Order order = new Order(generateOrderId(), name, email, new ArrayList<>(cart.getProducts()));
                         orderProcessor.processOrder(order);
+                        cart.clearCart();
                     }
                 }
 

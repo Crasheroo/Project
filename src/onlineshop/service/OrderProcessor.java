@@ -5,6 +5,7 @@ import onlineshop.model.Product;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 
 public class OrderProcessor {
     public void processOrder(Order order) {
@@ -18,6 +19,7 @@ public class OrderProcessor {
         try (FileWriter writer = new FileWriter(fileName)) {
             writer.write("Zamówienie ID: " + order.getOrderId() + "\n");
             writer.write("Klient: " + order.getCustomerName() + " email: " + order.getCustomerEmail());
+            writer.write("Data zamówienia: " + order.getOrderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "\n");
             writer.write("Produkty:\n");
 
             for (Product product : order.getProducts()) {

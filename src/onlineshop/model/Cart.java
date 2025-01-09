@@ -31,6 +31,11 @@ public class Cart {
                 .sum();
     }
 
+    public void clearCart() {
+        products.clear();
+        System.out.println("Koszyk zostal zresetowany");
+    }
+
     public List<Product> getProducts() {
         return products;
     }

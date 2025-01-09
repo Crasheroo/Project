@@ -1,5 +1,7 @@
 package onlineshop.model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,12 +11,15 @@ public class Order {
     private String customerEmail;
     private List<Product> products;
     private double totalPrice;
+    private LocalDateTime orderDate;
 
     public Order(int orderId, String customerName, String customerEmail, List<Product> products) {
         this.orderId = orderId;
         this.customerName = customerName;
         this.customerEmail = customerEmail;
         this.products = products;
+        this.totalPrice = calculateTotalPrice();
+        this.orderDate = LocalDateTime.now();
     }
 
     public double calculateTotalPrice() {
@@ -24,11 +29,21 @@ public class Order {
     }
 
     public void displayOrderDetails() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         System.out.println("ID zamówienia: " + orderId);
         System.out.println("Klient: " + customerName + " email: " + customerEmail);
+        System.out.println("Data zamówienia: " + orderDate.format(formatter));
         System.out.println("Produkty w zamówieniu:");
         products.forEach(product -> product.getInfo());
         System.out.println("Łączna kwota zamówienia: " + totalPrice + " zł");
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
     }
 
     public int getOrderId() {
