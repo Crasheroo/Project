@@ -1,5 +1,6 @@
-package Task1.Model;
+package onlineshop.model;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Computer extends Product {
@@ -22,7 +23,12 @@ public class Computer extends Product {
         amountOfRam = scanner.nextInt();
         scanner.nextLine();
 
-        getComputer();
+        getInfo();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(processor, amountOfRam);
     }
 
     public String getProcessor() {
@@ -41,7 +47,15 @@ public class Computer extends Product {
         this.amountOfRam = amountOfRam;
     }
 
-    private void getComputer() {
+    @Override
+    public void getInfo() {
         System.out.println("Komputer " + getName() + " z procesorem: " + processor + " i RAMem: " + amountOfRam + " GB");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Computer computer)) return false;
+        return amountOfRam == computer.amountOfRam && Objects.equals(processor, computer.processor);
     }
 }

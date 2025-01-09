@@ -1,7 +1,8 @@
-package Task1.Model;
+package onlineshop.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Smartphone extends Product{
@@ -35,7 +36,12 @@ public class Smartphone extends Product{
             }
             accesories.add(accesory);
         }
-        getSmartphone();
+        getInfo();
+    }
+
+    @Override
+    public void getInfo() {
+        System.out.println("Smartfon: " + getName() + " z kolorem " + color + ", baterią: " + batteryCapacity + " mAh i akcesoriami: " + accesories);
     }
 
     public String getColor() {
@@ -62,7 +68,15 @@ public class Smartphone extends Product{
         this.accesories = accesories;
     }
 
-    public void getSmartphone() {
-        System.out.println("Smartfon: " + getName() + " z kolorem " + color + ", baterią: " + batteryCapacity + " mAh i akcesoriami: " + accesories);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Smartphone that)) return false;
+        return batteryCapacity == that.batteryCapacity && Objects.equals(color, that.color) && Objects.equals(accesories, that.accesories);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color, batteryCapacity, accesories);
     }
 }

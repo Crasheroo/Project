@@ -1,8 +1,8 @@
-package Task1;
+package onlineshop;
 
-import Task1.Model.Computer;
-import Task1.Model.Electronics;
-import Task1.Model.Smartphone;
+import onlineshop.model.Computer;
+import onlineshop.model.Electronics;
+import onlineshop.model.Smartphone;
 
 public class Main {
     public static void main(String[] args) {
