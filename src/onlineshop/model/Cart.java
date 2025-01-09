@@ -32,7 +32,7 @@ public class Cart {
 
     public void displayCart() {
         if (products.isEmpty()) {
-            System.out.println("Koszyk jest pusty.");
+            System.err.println("Koszyk jest pusty.");
         } else {
             System.out.println("Produkty w koszyku:");
             products.forEach(product -> product.getInfo());
@@ -43,6 +43,35 @@ public class Cart {
         return products.stream()
                 .mapToDouble(p -> p.getPrice())
                 .sum();
+    }
+
+    public void updateCartAccesories(int productId, List<String> accesories) {
+        Product product = products.stream()
+                .filter(p -> p.getId() == productId && p instanceof Smartphone)
+                .findFirst()
+                .orElse(null);
+
+        if (product instanceof Smartphone smartphone) {
+            smartphone.getAccesories().addAll(accesories);
+            System.out.println("Dodano akcesoria dla " + smartphone.getName());
+        } else {
+            System.err.println("Nie masz telefonu w koszyku");
+        }
+    }
+
+    public void updateComputer(int productId, String newProcessor, int newRam) {
+        Product product = products.stream()
+                .filter(p -> p.getId() == productId && p instanceof Computer)
+                .findFirst()
+                .orElse(null);
+
+        if (product instanceof Computer computer) {
+            computer.setProcessor(newProcessor);
+            computer.setAmountOfRam(newRam);
+            System.out.println("Komputer " + computer.getName() + " zostal skonfigurowany");
+        } else {
+            System.err.println("Nie znaleziono komputera z podanym id w koszyku");
+        }
     }
 
     public void clearCart() {

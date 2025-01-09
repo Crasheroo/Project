@@ -2,6 +2,8 @@ package onlineshop;
 
 import onlineshop.exceptions.ProductOutOfStockException;
 import onlineshop.model.*;
+import onlineshop.service.OrderProcessor;
+import onlineshop.service.OrdersSaving;
 import onlineshop.service.ProductManager;
 
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ public class Main {
         ProductManager productManager = new ProductManager();
         Cart cart = new Cart();
         Scanner scanner = new Scanner(System.in);
+        OrderProcessor orderProcessor = new OrderProcessor(5);
+        OrdersSaving ordersSaving = new OrdersSaving();
 
         productManager.addProduct(new Computer(1, "Laptop gejmingowy", 10000, 2, "", 6));
         productManager.addProduct(new Smartphone(2, "Samsong", 3000, 10, "", 2137));
@@ -24,7 +28,9 @@ public class Main {
             System.out.println("3. Wyświetl koszyk");
             System.out.println("4. Usuń produkt z koszyka");
             System.out.println("5. Złóż zamówienie");
-            System.out.println("6. Wyjdz");
+            System.out.println("6. Dodaj akcesoria do telefonu");
+            System.out.println("7. Konfiguruj komputer");
+            System.out.println("8. Wyjdz");
 
             int option = scanner.nextInt();
             scanner.nextLine();
@@ -89,18 +95,64 @@ public class Main {
                             order.applyDiscount(discount);
                             System.out.println("Rabat: " + order.getDiscountValue() + " zł");
                         } else if (!promoCode.isEmpty()) {
-                            System.out.println("Nie ma takiego kodu");
+                            System.err.println("Nie ma takiego kodu");
                         }
 
                         order.displayOrderDetails();
-
+                        orderProcessor.processOrder(order);
+                        ordersSaving.saveOrder(order);
                         cart.clearCart();
                     }
                 }
 
                 case 6 -> {
+                    System.out.println("Podaj ID telefonu");
+                    int smartphoneId = scanner.nextInt();
+                    scanner.nextLine();
+
+                    Product product = findProductById(cart.getProducts(), smartphoneId);
+                    if (product instanceof Smartphone smartphone) {
+                        List<String> newAccesories = new ArrayList<>();
+                        System.out.println("Dodawanie akcesoriow. ('koniec' zeby wyjsc)");
+                        while (true) {
+                            System.out.print("Dodaj akcesorium: ");
+                            String accessory = scanner.nextLine();
+                            if (accessory.equalsIgnoreCase("koniec")) {
+                                break;
+                            }
+                            newAccesories.add(accessory);
+                        }
+
+                        cart.updateCartAccesories(smartphoneId, newAccesories);
+                    } else {
+                        System.err.println("Nie ma telefonu w koszyku");
+                    }
+                }
+
+                case 7 -> {
+                    System.out.print("Podaj ID komputera: ");
+                    int computerId = scanner.nextInt();
+                    scanner.nextLine();
+
+                    Product product = findProductById(cart.getProducts(), computerId);
+                    if (product instanceof Computer computer) {
+                        System.out.print("Podaj nowy procesor: ");
+                        String newProcessor = scanner.nextLine();
+
+                        System.out.print("Podaj nowa ilosc RAM (GB): ");
+                        int newRam = scanner.nextInt();
+                        scanner.nextLine();
+
+                        cart.updateComputer(computerId, newProcessor, newRam);
+                    } else {
+                        System.err.println("Nie ma komputera w koszyku");
+                    }
+                }
+
+                case 8 -> {
                     System.out.println("Baj baj");
                     scanner.close();
+                    orderProcessor.shutdownThread();
                     return;
                 }
 

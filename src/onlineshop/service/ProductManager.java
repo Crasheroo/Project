@@ -11,7 +11,6 @@ public class ProductManager {
 
     public void addProduct(Product product) {
         products.add(product);
-        product.getInfo();
         System.out.println("Produkt dodany: " + product);
     }
 

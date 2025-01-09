@@ -10,7 +10,7 @@ import java.util.List;
 public class OrdersSaving {
     private static final String FILE_NAME = "orders.txt";
 
-    public void saveOrder(Order order) {
+    public synchronized void saveOrder(Order order) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
             writer.write(formatOrder(order));
             writer.newLine();
