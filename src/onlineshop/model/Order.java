@@ -10,12 +10,11 @@ public class Order {
     private List<Product> products;
     private double totalPrice;
 
-    public Order(int orderId, String customerName, String customerEmail, List<Product> products, double totalPrice) {
+    public Order(int orderId, String customerName, String customerEmail, List<Product> products) {
         this.orderId = orderId;
         this.customerName = customerName;
         this.customerEmail = customerEmail;
         this.products = products;
-        this.totalPrice = totalPrice;
     }
 
     public double calculateTotalPrice() {

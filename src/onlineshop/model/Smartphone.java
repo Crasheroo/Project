@@ -79,4 +79,13 @@ public class Smartphone extends Product{
     public int hashCode() {
         return Objects.hash(color, batteryCapacity, accesories);
     }
+
+    @Override
+    public String toString() {
+        return "Smartphone{" +
+                "color='" + color + '\'' +
+                ", batteryCapacity=" + batteryCapacity +
+                ", accesories=" + accesories +
+                '}';
+    }
 }

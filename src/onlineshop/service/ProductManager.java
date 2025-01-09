@@ -37,4 +37,8 @@ public class ProductManager {
             products.forEach(product -> product.getInfo());
         }
     }
+
+    public List<Product> getProducts() {
+        return products;
+    }
 }

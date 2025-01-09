@@ -30,4 +30,8 @@ public class Cart {
                 .mapToDouble(p -> p.getPrice())
                 .sum();
     }
+
+    public List<Product> getProducts() {
+        return products;
+    }
 }

@@ -58,4 +58,12 @@ public class Computer extends Product {
         if (!(o instanceof Computer computer)) return false;
         return amountOfRam == computer.amountOfRam && Objects.equals(processor, computer.processor);
     }
+
+    @Override
+    public String toString() {
+        return "Computer{" +
+                "processor='" + processor + '\'' +
+                ", amountOfRam=" + amountOfRam +
+                '}';
+    }
 }
