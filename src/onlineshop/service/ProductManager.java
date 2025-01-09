@@ -1,5 +1,6 @@
 package onlineshop.service;
 
+import onlineshop.exceptions.ProductOutOfStockException;
 import onlineshop.model.Product;
 
 import java.util.ArrayList;
@@ -15,7 +16,10 @@ public class ProductManager {
     }
 
     public void removeProduct(int id) {
-        products.removeIf(product -> product.getId() == id);
+        boolean removed = products.removeIf(product -> product.getId() == id);
+        if (!removed) {
+            throw new ProductOutOfStockException("Produkt o ID " + id + " nie istnieje");
+        }
         System.out.println("Produkt usunięty: ID " + id);
     }
 

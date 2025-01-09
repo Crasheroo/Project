@@ -1,5 +1,6 @@
 package onlineshop.service;
 
+import onlineshop.exceptions.OrderProcessingException;
 import onlineshop.model.Order;
 import onlineshop.model.Product;
 
@@ -9,8 +10,12 @@ import java.time.format.DateTimeFormatter;
 
 public class OrderProcessor {
     public void processOrder(Order order) {
-        order.displayOrderDetails();
-        generateFaktura(order);
+        try {
+            order.displayOrderDetails();
+            generateFaktura(order);
+        } catch (Exception e) {
+            throw new OrderProcessingException("Problem podczas robienia zamówienia: " + e.getMessage());
+        }
     }
 
     private void generateFaktura(Order order) {

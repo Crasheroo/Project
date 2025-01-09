@@ -1,5 +1,6 @@
 package onlineshop;
 
+import onlineshop.exceptions.ProductOutOfStockException;
 import onlineshop.model.*;
 import onlineshop.service.OrderProcessor;
 import onlineshop.service.ProductManager;
@@ -41,11 +42,15 @@ public class Main {
                     int productId = scanner.nextInt();
                     scanner.nextLine();
 
-                    Product product = findProductById(productManager.getProducts(), productId);
-                    if (product != null) {
-                        cart.addProduct(product);
-                    } else {
-                        System.err.println("Nie ma produktu z tym ID");
+                    try {
+                        Product product = findProductById(productManager.getProducts(), productId);
+                        if (product != null) {
+                            cart.addProduct(product);
+                        } else {
+                            System.err.println("Nie ma produktu z tym ID");
+                        }
+                    } catch (ProductOutOfStockException e) {
+                        System.err.println("Błąd: " + e.getMessage());
                     }
                 }
 
