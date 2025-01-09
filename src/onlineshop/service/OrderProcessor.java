@@ -12,9 +12,11 @@ import java.util.concurrent.Executors;
 
 public class OrderProcessor {
     private final ExecutorService executorService;
+    private final OrdersSaving ordersSaving;
 
     public OrderProcessor(int numberOfThreads) {
         this.executorService = Executors.newFixedThreadPool(numberOfThreads);
+        this.ordersSaving = new OrdersSaving();
     }
 
     public void processOrderAsync(Order order) {
@@ -36,6 +38,7 @@ public class OrderProcessor {
         try {
             order.displayOrderDetails();
             generateFaktura(order);
+            ordersSaving.saveOrder(order);
         } catch (Exception e) {
             throw new OrderProcessingException("Problem podczas robienia zamowienia: " + e.getMessage());
         }
