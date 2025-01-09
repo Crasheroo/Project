@@ -11,6 +11,7 @@ public class Order {
     private String customerEmail;
     private List<Product> products;
     private double totalPrice;
+    private double discountValue;
     private LocalDateTime orderDate;
 
     public Order(int orderId, String customerName, String customerEmail, List<Product> products) {
@@ -18,14 +19,29 @@ public class Order {
         this.customerName = customerName;
         this.customerEmail = customerEmail;
         this.products = products;
+        this.discountValue = 0.0;
         this.totalPrice = calculateTotalPrice();
         this.orderDate = LocalDateTime.now();
     }
 
     public double calculateTotalPrice() {
-        return products.stream()
+        double total = products.stream()
                 .mapToDouble(product -> product.getPrice())
                 .sum();
+        return Math.max(0, total - discountValue);
+    }
+
+    public void applyDiscount(Discount discount) {
+        double total = products.stream()
+                .mapToDouble(products -> products.getPrice())
+                .sum();
+
+        if (total >- discount.getMinimumOrderValue()) {
+            double percentageDiscount = total + discount.getPercentage();
+            double fixedDiscount = discount.getFixedAmount();
+            this.discountValue = Math.max(percentageDiscount, fixedDiscount);
+            this.totalPrice = calculateTotalPrice();
+        }
     }
 
     public void displayOrderDetails() {
@@ -35,6 +51,7 @@ public class Order {
         System.out.println("Data zamówienia: " + orderDate.format(formatter));
         System.out.println("Produkty w zamówieniu:");
         products.forEach(product -> product.getInfo());
+        System.out.println("Zastosowany rabat: " + discountValue + " zł");
         System.out.println("Łączna kwota zamówienia: " + totalPrice + " zł");
     }
 
@@ -85,6 +102,14 @@ public class Order {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public double getDiscountValue() {
+        return discountValue;
+    }
+
+    public void setDiscountValue(double discountValue) {
+        this.discountValue = discountValue;
     }
 
     @Override

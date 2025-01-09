@@ -81,6 +81,19 @@ public class Main {
                         String email = scanner.nextLine();
 
                         Order order = new Order(generateOrderId(), name, email, new ArrayList<>(cart.getProducts()));
+
+                        System.out.print("Podaj kod promocyjny jezeli jest: ");
+                        String promoCode = scanner.nextLine();
+                        Discount discount = getDiscountByCode(promoCode);
+                        if (discount != null) {
+                            order.applyDiscount(discount);
+                            System.out.println("Rabat: " + order.getDiscountValue() + " zł");
+                        } else if (!promoCode.isEmpty()) {
+                            System.out.println("Nie ma takiego kodu");
+                        }
+
+                        order.displayOrderDetails();
+
                         cart.clearCart();
                     }
                 }
@@ -94,6 +107,14 @@ public class Main {
                 default -> System.out.println("Wybierz inna opcje");
             }
         }
+    }
+
+    private static Discount getDiscountByCode(String promoCode) {
+        return switch (promoCode.toUpperCase()) {
+            case "BOBI10" -> new Discount("BOBI10", 0.1, 0, 0);
+            case "FIXED50" -> new Discount("FIXED50", 0, 50, 200);
+            default -> null;
+        };
     }
 
     private static Product findProductById(List<Product> products, int productId) {
