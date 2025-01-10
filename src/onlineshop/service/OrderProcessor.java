@@ -10,6 +10,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Klasa ma funkcjonalnosc przetwarzania zamowien w sposob synchroniczny i asynchroniczny.
+ * Obsluguje generowanie faktyr oraz zapis zamowien przy uzyciu wielowatkowosci
+ */
 public class OrderProcessor {
     private final ExecutorService executorService;
     private final OrderPersistance ordersSaving;
@@ -19,6 +23,9 @@ public class OrderProcessor {
         this.ordersSaving = new OrderPersistance();
     }
 
+    /**
+     * Przetwarza zamowienie asynchronicznie.
+     */
     public void processOrderAsync(Order order) {
         executorService.submit(() -> {
             try {
@@ -31,6 +38,10 @@ public class OrderProcessor {
         });
     }
 
+    /**
+     * Przetwarza zamowienie synchronicznie.
+     * Wyswietla szczegoly zamowienia oraz generuje fakture.
+     */
     public void processOrder(Order order) {
         try {
             order.displayOrderDetails();
@@ -40,6 +51,9 @@ public class OrderProcessor {
         }
     }
 
+    /**
+     * Generuje fakture jako plik tekstowy
+     */
     private void generateFaktura(Order order) {
         String fileName = "Faktura " + order.getOrderId() + ".txt";
 
@@ -61,6 +75,9 @@ public class OrderProcessor {
         }
     }
 
+    /**
+     * Zamyka watki uzywane do przetwarzania zamowien.
+     */
     public void shutdownThread() {
         executorService.shutdown();
         System.out.println("Procesor zostal zamkniety");

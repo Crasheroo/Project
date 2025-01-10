@@ -5,6 +5,13 @@ import onlineshop.exceptions.ProductOutOfStockException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * klasa reprezentująca koszyk w sklepie internetowym.
+ * Pozwala na dodawanie, usuwanie i wyświetlanie produktów,
+ * zarządzanie akcesoriami do telefonów, konfiguracje komputerów
+ * i obliczanie całkowitej wartości rzeczy w koszyku.
+ */
+
 public class Cart {
     private List<Product> products;
 
@@ -12,6 +19,10 @@ public class Cart {
         this.products = new ArrayList<>();
     }
 
+    /**
+    *  Dodaje produkt do koszyka.
+    *  Zmniejsza liczbe dostepnych sztuk produktu w magazynie o 1
+    */
     public void addProduct(Product product) {
         if (product.getAmountOfAvailable() <= 0) {
             throw new ProductOutOfStockException("Produktu " + product.getName() + " nie ma w magazynie");
@@ -21,6 +32,10 @@ public class Cart {
         System.out.println("Dodano do koszyka: " + product.getName());
     }
 
+    /**
+     * Usuwa produkt z koszuka.
+     * Zwiększa liczbę dostępnych produktów w magazynie o 1
+     */
     public void removeProduct(Product product) {
         if (products.remove(product)) {
             product.setAmountOfAvailable(product.getAmountOfAvailable() + 1);
@@ -30,6 +45,9 @@ public class Cart {
         }
     }
 
+    /**
+     * Wyświetla zawartość koszyka w konsoli.
+     */
     public void displayCart() {
         if (products.isEmpty()) {
             System.err.println("Koszyk jest pusty.");
@@ -39,12 +57,19 @@ public class Cart {
         }
     }
 
+    /**
+     * Oblicza łączną wartość produktów w koszyku.
+     *
+     */
     public double calculateTotal() {
         return products.stream()
                 .mapToDouble(p -> p.getPrice())
                 .sum();
     }
 
+    /**
+     * Dodaje akcesoria do smartfona znajdujacego sie w koszyku.
+     */
     public void updateCartAccesories(int productId, List<String> accesories) {
         Product product = products.stream()
                 .filter(p -> p.getId() == productId && p instanceof Smartphone)
@@ -59,6 +84,10 @@ public class Cart {
         }
     }
 
+    /**
+     * Konfiguruje komputer znajdujący się w koszyku, zmieniając jego procesor i ilość RAM.
+     *
+     */
     public void updateComputer(int productId, String newProcessor, int newRam) {
         Product product = products.stream()
                 .filter(p -> p.getId() == productId && p instanceof Computer)
@@ -74,6 +103,9 @@ public class Cart {
         }
     }
 
+    /**
+     * Oprocznia koszyk.
+     */
     public void clearCart() {
         products.clear();
         System.out.println("Koszyk zostal zresetowany");

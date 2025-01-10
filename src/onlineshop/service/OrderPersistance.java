@@ -7,9 +7,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Klasa zapewnia funkcje zapisywania i odczytu zamówień
+ * w pliku tekstowym. Jest do twałego przechowywania danych zamowien.
+ */
 public class OrderPersistance {
     private static final String FILE_NAME = "orders.txt";
 
+    /**
+     * Zapisuje zamówienie do pliku tekstowego w sposób zsychnronizowany.
+     */
     public synchronized void saveOrder(Order order) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
             writer.write(formatOrder(order));
@@ -20,6 +27,9 @@ public class OrderPersistance {
         }
     }
 
+    /**
+     * Wczytuje wszystkie zamówienia z pliku tekstowego.
+     */
     public List<String> loadOrders() {
         List<String> orders = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
@@ -36,6 +46,9 @@ public class OrderPersistance {
         return orders;
     }
 
+    /**
+     * Formatuje zamówienie do zapisania w pliku.
+     */
     private String formatOrder(Order order) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

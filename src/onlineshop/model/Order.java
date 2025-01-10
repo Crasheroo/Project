@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Klasa reprezentujaca zamówienie w sklepie internetowym.
+ * Przechowując informacje o zamówieniu, takie jak ID zamówienia, dane klienta,
+ * lista produktów, łączna cena, wartość rabatu oraz data zamówienia.
+ */
 public class Order {
     private int orderId;
     private String customerName;
@@ -25,10 +30,16 @@ public class Order {
         this.orderDate = LocalDateTime.now();
     }
 
+    /**
+     * Tworzy zamówienie na podstawie koszyka.
+     */
     public static Order fromCart(int orderId, String customerName, String customerEmail, Cart cart) {
         return new Order(orderId, customerName, customerEmail, new ArrayList<>(cart.getProducts()));
     }
 
+    /**
+     * Oblicza całkowitą cenę zamówienia, uwzględniając zastosowany rabat.
+     */
     public double calculateTotalPrice() {
         double total = products.stream()
                 .mapToDouble(product -> product.getPrice())
@@ -36,6 +47,10 @@ public class Order {
         return Math.max(0, total - discountValue);
     }
 
+    /**
+     * Zastosowuje rabat do zamówienia, wybierając wyzszy rabat z dwoch opcji:
+     * preocentowego lub kwotowego.
+     */
     public void applyDiscount(Discount discount) {
         double total = products.stream()
                 .mapToDouble(products -> products.getPrice())
@@ -51,6 +66,9 @@ public class Order {
         }
     }
 
+    /**
+     * Wyswietla szczegóły zamówienia w konsoli.
+     */
     public void displayOrderDetails() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         System.out.println("ID zamówienia: " + orderId);

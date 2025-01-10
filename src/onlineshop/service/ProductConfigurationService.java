@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Klasa ma funkcjonalnosc konfiguracji produktow znajdujących sie w koszyku przez interakcje poprzez konsole.
+ */
 public class ProductConfigurationService {
     private final Scanner scanner;
 
@@ -16,6 +19,9 @@ public class ProductConfigurationService {
         this.scanner = scanner;
     }
 
+    /**
+     * Dodaje akcesoria dla smartfona znajdujacego sie w koszyku poprzez konsole.
+     */
     private void configureSmartphone(Smartphone smartphone, Cart cart) {
         List<String> newAccesories = new ArrayList<>();
         System.out.println("Dodawanie akcesoriow. Wybierz opcje:");
@@ -40,6 +46,9 @@ public class ProductConfigurationService {
         cart.updateCartAccesories(smartphone.getId(), newAccesories);
     }
 
+    /**
+     * Konfiguruje komputer znajdujacy sie w koszuku.
+     */
     private void configureComputer(Computer computer, Cart cart) {
         System.out.print("Podaj nowy procesor: ");
         String newProcessor = scanner.nextLine();
@@ -51,6 +60,9 @@ public class ProductConfigurationService {
         cart.updateComputer(computer.getId(), newProcessor, newRam);
     }
 
+    /**
+     * Tu rozpoczyna proces konfiguracji dla podanego produktu.
+     */
     public void configureProduct(Product product, Cart cart) {
         if (product instanceof Smartphone smartphone) {
             configureSmartphone(smartphone, cart);
