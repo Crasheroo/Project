@@ -1,6 +1,6 @@
 package onlineshop.model;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class Order {
     private List<Product> products;
     private double totalPrice;
     private double discountValue;
-    private LocalDateTime orderDate;
+    private ZonedDateTime orderDate;
 
     public Order(int orderId, String customerName, String customerEmail, List<Product> products) {
         this.orderId = orderId;
@@ -27,7 +27,7 @@ public class Order {
         this.products = products;
         this.discountValue = 0.0;
         this.totalPrice = calculateTotalPrice();
-        this.orderDate = LocalDateTime.now();
+        this.orderDate = ZonedDateTime.now();
     }
 
     /**
@@ -70,7 +70,7 @@ public class Order {
      * Wyswietla szczegóły zamówienia w konsoli.
      */
     public void displayOrderDetails() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
         System.out.println("ID zamówienia: " + orderId);
         System.out.println("Klient: " + customerName + " email: " + customerEmail);
         System.out.println("Data zamówienia: " + orderDate.format(formatter));
@@ -80,11 +80,11 @@ public class Order {
         System.out.println("Łączna kwota zamówienia: " + totalPrice + " zł");
     }
 
-    public LocalDateTime getOrderDate() {
+    public ZonedDateTime getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(LocalDateTime orderDate) {
+    public void setOrderDate(ZonedDateTime orderDate) {
         this.orderDate = orderDate;
     }
 
