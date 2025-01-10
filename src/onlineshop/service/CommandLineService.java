@@ -132,7 +132,7 @@ public class CommandLineService {
 
             }
 
-            orderProcessor.processOrder(order);
+            orderProcessor.processOrderAsync(order);
             orderPersistance.saveOrder(order);
             cart.clearCart();
             System.out.println("Zamowienie zostalo zlozone.");

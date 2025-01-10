@@ -42,7 +42,7 @@ public class OrderProcessor {
      * Przetwarza zamowienie synchronicznie.
      * Wyswietla szczegoly zamowienia oraz generuje fakture.
      */
-    public void processOrder(Order order) {
+    private void processOrder(Order order) {
         try {
             order.displayOrderDetails();
             generateFaktura(order);
