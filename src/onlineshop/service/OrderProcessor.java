@@ -16,11 +16,11 @@ import java.util.concurrent.Executors;
  */
 public class OrderProcessor {
     private final ExecutorService executorService;
-    private final OrderPersistance orderPersistance;
+    private final OrderRepository orderRepository;
 
     public OrderProcessor(int numberOfThreads) {
         this.executorService = Executors.newFixedThreadPool(numberOfThreads);
-        this.orderPersistance = new OrderPersistance();
+        this.orderRepository = new OrderRepository();
     }
 
     /**
@@ -31,7 +31,7 @@ public class OrderProcessor {
             try {
                 System.out.println("Rozpoczynam przetwarzanie zamowienia");
                 processOrder(order);
-                orderPersistance.saveOrder(order);
+                orderRepository.saveOrder(order);
                 System.out.println("Zamowienie ID: " + order.getOrderId() + " przetworzone");
             } catch (Exception e) {
                 throw new OrderProcessingException("Problem podczas robienia zamówienia: " + e.getMessage());

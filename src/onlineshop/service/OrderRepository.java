@@ -6,12 +6,13 @@ import java.io.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Klasa zapewnia funkcje zapisywania i odczytu zamówień
  * w pliku tekstowym. Jest do twałego przechowywania danych zamowien.
  */
-public class OrderPersistance {
+public class OrderRepository {
     private static final String FILE_NAME = "orders.txt";
 
     /**
@@ -19,7 +20,7 @@ public class OrderPersistance {
      */
     public synchronized void saveOrder(Order order) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
-            writer.write(formatOrder(order));
+            writer.write(order.formatOrder(order));
             writer.newLine();
             System.out.println("Zamówienie zapisane w " + FILE_NAME);
         } catch (IOException e) {
@@ -44,23 +45,5 @@ public class OrderPersistance {
         }
 
         return orders;
-    }
-
-    /**
-     * Formatuje zamówienie do zapisania w pliku.
-     */
-    private String formatOrder(Order order) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("Zamowienie ID: ").append(order.getOrderId()).append("\n");
-        sb.append("Klient: ").append(order.getCustomerName()).append(" email: ").append(order.getCustomerEmail()).append("\n");
-        sb.append("Data zamowienia: ").append(order.getOrderDate().format(formatter)).append("\n");
-        sb.append("Produkty:\n");
-        order.getProducts()
-                        .forEach(product ->
-                                sb.append(product.getName()).append(", cena: ").append(product.getPrice()).append(" zł\n"));
-        sb.append("Łączna kwota: ").append(order.getTotalPrice()).append(" zł\n");
-        return sb.toString();
     }
 }

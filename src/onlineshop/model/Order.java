@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Klasa reprezentujaca zamówienie w sklepie internetowym.
@@ -74,6 +75,27 @@ public class Order {
         products.forEach(System.out::println);
         System.out.println("Zastosowany rabat: " + discountValue + " zł");
         System.out.println("Łączna kwota zamówienia: " + totalPrice + " zł");
+    }
+
+    /**
+     * Formatuje zamówienie do zapisania w pliku.
+     */
+    public String formatOrder(Order order) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        return String.format("Zamowienie ID: %d\n" +
+                        "Klient: %s email: %s\n" +
+                        "Data zamowienia: %s\n" +
+                        "Produkty:\n%s" +
+                        "Laczna kwota: %.2f zl\n",
+                order.getOrderId(),
+                order.getCustomerName(),
+                order.getCustomerEmail(),
+                order.getOrderDate().format(formatter),
+                order.getProducts().stream()
+                        .map(product -> String.format("%s, cena: %.2f zł\n", product.getName(), product.getPrice()))
+                        .collect(Collectors.joining()),
+                order.getTotalPrice());
     }
 
     public ZonedDateTime getOrderDate() {

@@ -14,7 +14,7 @@ public class CommandLineService {
     Cart cart = new Cart();
     Scanner scanner = new Scanner(System.in);
     OrderProcessor orderProcessor = new OrderProcessor(5);
-    OrderPersistance orderPersistance = new OrderPersistance();
+    OrderRepository orderRepository = new OrderRepository();
     ProductConfigurationService productConfigurationService = new ProductConfigurationService(scanner);
 
     /**
@@ -133,7 +133,7 @@ public class CommandLineService {
             }
 
             orderProcessor.processOrderAsync(order);
-            orderPersistance.saveOrder(order);
+            orderRepository.saveOrder(order);
             cart.clearCart();
             System.out.println("Zamowienie zostalo zlozone.");
         }
