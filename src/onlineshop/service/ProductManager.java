@@ -55,6 +55,7 @@ public class ProductManager {
         discountMap.put("BOBI10", new Discount("BOBI10", 0.1, 0, 0));
         discountMap.put("FIXED50", new Discount("FIXED50", 0, 50, 200));
     }
+
     public void displayDiscounts() {
         if (discountMap.isEmpty()) {
             System.out.println("Brak kodow rabatowych");

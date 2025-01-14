@@ -59,16 +59,6 @@ public class Cart {
     }
 
     /**
-     * Oblicza łączną wartość produktów w koszyku.
-     *
-     */
-    public double calculateTotal() {
-        return products.stream()
-                .mapToDouble(p -> p.getPrice())
-                .sum();
-    }
-
-    /**
      * Dodaje akcesoria do smartfona znajdujacego sie w koszyku.
      */
     public void updateCartAccesories(int productId, List<String> accesories) {
@@ -76,7 +66,7 @@ public class Cart {
                 .filter(p -> p.getId() == productId)
                 .findFirst();
 
-        if (productOptional.isPresent() && productOptional.get() instanceof Smartphone) {
+        if (productOptional.isPresent() ) {
             Smartphone smartphone = (Smartphone) productOptional.get();
             smartphone.getAccesories().addAll(accesories);
             System.out.println("Dodano akcesoria dla " + smartphone.getName());
@@ -94,7 +84,7 @@ public class Cart {
                 .filter(p -> p.getId() == productId)
                 .findFirst();
 
-        if (productOptional.isPresent() && productOptional.get() instanceof Computer) {
+        if (productOptional.isPresent()) {
             Computer computer = (Computer) productOptional.get();
             computer.setProcessor(newProcessor);
             computer.setAmountOfRam(newRam);
