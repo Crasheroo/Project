@@ -113,7 +113,7 @@ public class CommandLineService {
         System.out.print("Podaj email: ");
         String email = scanner.nextLine();
 
-        Order order = Order.fromCart(productManager.generateOrderId(), name, email, cart);
+        Order order = new Order(productManager.generateOrderId(), name, email, cart);
 
         AtomicBoolean discountApplied = new AtomicBoolean(false);
         while (!discountApplied.get()) {
@@ -178,6 +178,6 @@ public class CommandLineService {
     private void exit() {
         System.out.println("Baj baj");
         scanner.close();
-        orderProcessor.shutdownThread();
+        orderProcessor.shutdown();
     }
 }

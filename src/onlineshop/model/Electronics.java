@@ -7,6 +7,6 @@ public class Electronics extends Product{
 
     @Override
     public String toString() {
-        return "Elektronika: ID: " + getId() + ", nazwa: " + getName() + ", cena: " + getPrice() + ", dostepnych sztuk: " + getAmountOfAvailable();
+        return "Elektronika: ID: " + getId() + ", nazwa: " + getName() + ", cena: " + getPrice() + ", dostepnych sztuk: " + getItemsAvailable();
     }
 }

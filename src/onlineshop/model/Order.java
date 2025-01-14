@@ -33,8 +33,8 @@ public class Order {
     /**
      * Tworzy zamówienie na podstawie koszyka.
      */
-    public static Order fromCart(int orderId, String customerName, String customerEmail, Cart cart) {
-        return new Order(orderId, customerName, customerEmail, new ArrayList<>(cart.getProducts()));
+    public Order(int orderId, String customerName, String customerEmail, Cart cart) {
+        this(orderId, customerName, customerEmail, new ArrayList<>(cart.getProducts()));
     }
 
     /**
@@ -52,15 +52,11 @@ public class Order {
      * preocentowego lub kwotowego.
      */
     public void applyDiscount(Discount discount) {
-        double total = products.stream()
-                .mapToDouble(products -> products.getPrice())
-                .sum();
-
-        if (total >- discount.getMinimumOrderValue()) {
-            double percentageDiscount = total * discount.getPercentage();
+        if (this.totalPrice >= discount.getMinimumOrderValue()) {
+            double percentageDiscount = this.totalPrice * discount.getPercentage();
             double fixedDiscount = discount.getFixedAmount();
 
-            this.discountValue = Math.min(total, Math.max(percentageDiscount, fixedDiscount));
+            this.discountValue = Math.min(this.totalPrice, Math.max(percentageDiscount, fixedDiscount));
             this.totalPrice = calculateTotalPrice();
             System.out.println("Zastosowano rabat: " + this.discountValue + " zł");
         }

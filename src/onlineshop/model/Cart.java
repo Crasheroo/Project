@@ -4,6 +4,7 @@ import onlineshop.exceptions.ProductOutOfStockException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * klasa reprezentująca koszyk w sklepie internetowym.
@@ -24,11 +25,11 @@ public class Cart {
     *  Zmniejsza liczbe dostepnych sztuk produktu w magazynie o 1
     */
     public void addProduct(Product product) {
-        if (product.getAmountOfAvailable() <= 0) {
+        if (product.getItemsAvailable() <= 0) {
             throw new ProductOutOfStockException("Produktu " + product.getName() + " nie ma w magazynie");
         }
         products.add(product);
-        product.setAmountOfAvailable(product.getAmountOfAvailable() - 1);
+        product.setItemsAvailable(product.getItemsAvailable() - 1);
         System.out.println("Dodano do koszyka: " + product.getName());
     }
 
@@ -38,7 +39,7 @@ public class Cart {
      */
     public void removeProduct(Product product) {
         if (products.remove(product)) {
-            product.setAmountOfAvailable(product.getAmountOfAvailable() + 1);
+            product.setItemsAvailable(product.getItemsAvailable() + 1);
             System.out.println("Usnieto z koszyka: " + product.getName());
         } else {
             throw new ProductOutOfStockException("Produktu nie ma w koszyku");
@@ -71,16 +72,16 @@ public class Cart {
      * Dodaje akcesoria do smartfona znajdujacego sie w koszyku.
      */
     public void updateCartAccesories(int productId, List<String> accesories) {
-        Product product = products.stream()
-                .filter(p -> p.getId() == productId && p instanceof Smartphone)
-                .findFirst()
-                .orElse(null);
+        Optional<Product> productOptional = products.stream()
+                .filter(p -> p.getId() == productId)
+                .findFirst();
 
-        if (product instanceof Smartphone smartphone) {
+        if (productOptional.isPresent() && productOptional.get() instanceof Smartphone) {
+            Smartphone smartphone = (Smartphone) productOptional.get();
             smartphone.getAccesories().addAll(accesories);
             System.out.println("Dodano akcesoria dla " + smartphone.getName());
         } else {
-            System.err.println("Nie masz telefonu w koszyku");
+            System.err.println("Nie masz telefonu w koszyku.");
         }
     }
 
@@ -89,12 +90,12 @@ public class Cart {
      *
      */
     public void updateComputer(int productId, String newProcessor, int newRam) {
-        Product product = products.stream()
-                .filter(p -> p.getId() == productId && p instanceof Computer)
-                .findFirst()
-                .orElse(null);
+        Optional<Product> productOptional = products.stream()
+                .filter(p -> p.getId() == productId)
+                .findFirst();
 
-        if (product instanceof Computer computer) {
+        if (productOptional.isPresent() && productOptional.get() instanceof Computer) {
+            Computer computer = (Computer) productOptional.get();
             computer.setProcessor(newProcessor);
             computer.setAmountOfRam(newRam);
             System.out.println("Komputer " + computer.getName() + " zostal skonfigurowany");

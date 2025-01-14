@@ -46,7 +46,7 @@ public class OrderProcessor {
     private void processOrder(Order order) {
         try {
             order.displayOrderDetails();
-            generateFaktura(order);
+            generateInvoice(order);
         } catch (Exception e) {
             throw new OrderProcessingException("Problem podczas robienia zamowienia: " + e.getMessage());
         }
@@ -55,7 +55,7 @@ public class OrderProcessor {
     /**
      * Generuje fakture jako plik tekstowy
      */
-    private void generateFaktura(Order order) {
+    private void generateInvoice(Order order) {
         String fileName = "Faktura " + order.getOrderId() + ".txt";
 
         try (FileWriter writer = new FileWriter(fileName)) {
@@ -79,7 +79,7 @@ public class OrderProcessor {
     /**
      * Zamyka watki uzywane do przetwarzania zamowien.
      */
-    public void shutdownThread() {
+    public void shutdown() {
         executorService.shutdown();
         System.out.println("Procesor zostal zamkniety");
     }
