@@ -98,6 +98,7 @@ public class Cart {
      * Oprocznia koszyk.
      */
     public void clearCart() {
+        products.forEach(product -> product.setItemsAvailable(product.getItemsAvailable() + 1));
         products.clear();
         System.out.println("Koszyk zostal zresetowany");
     }

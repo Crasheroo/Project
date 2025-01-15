@@ -1,9 +1,6 @@
 package onlineshop.service;
 
-import onlineshop.model.Cart;
-import onlineshop.model.Computer;
-import onlineshop.model.Product;
-import onlineshop.model.Smartphone;
+import onlineshop.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,27 +20,105 @@ public class ProductConfigurationService {
      * Dodaje akcesoria dla smartfona znajdujacego sie w koszyku poprzez konsole.
      */
     private void configureSmartphone(Smartphone smartphone, Cart cart) {
-        List<String> newAccesories = new ArrayList<>();
-        System.out.println("Dodawanie akcesoriow. Wybierz opcje:");
-        System.out.println("1 - Dodaj akcesorium");
-        System.out.println("0 - Wyjdz");
-
+        System.out.println("Konfigurowanie smartfona. Wybierz opcje:");
         while (true) {
-            System.out.print("Wybierz opcję: ");
+            System.out.println("1 - Dodaj akcesorium");
+            System.out.println("2 - Dodaj kolor");
+            System.out.println("3 - Wyswietl konfiguracje");
+            System.out.println("4 - Usun akcesorium");
+            System.out.println("0 - Wyjdz");
+            System.out.print("Wybierz opcje: ");
+
             int option = scanner.nextInt();
             scanner.nextLine();
 
-            if (option == 0) {
-                break;
-            } else if (option == 1) {
-                System.out.print("Dodaj akcesorium: ");
-                String accesory = scanner.nextLine();
-                newAccesories.add(accesory);
-            } else {
-                System.err.println("Niepoprawna opcja");
+            switch (option) {
+                case 0 -> {
+                    cart.updateCartAccesories(smartphone.getId(), smartphone.getAccesories());
+                    System.out.println("Koniec konfiguracji");
+                    return;
+                }
+                case 1 -> addAccessory(smartphone);
+                case 2 -> selectColor(smartphone);
+                case 3 -> displayConfiguration(smartphone);
+                case 4 -> removeAccessory(smartphone);
+                default -> System.err.println("Zla opcja");
             }
         }
-        cart.updateCartAccesories(smartphone.getId(), newAccesories);
+    }
+
+    private void removeAccessory(Smartphone smartphone) {
+        if (smartphone.getAccesories().isEmpty()) {
+            System.out.println("Brak akcesoriow do usuniecia");
+            return;
+        }
+
+        System.out.println("\nWybrane akcesoria:");
+        int i = 1;
+        for (String accesory : smartphone.getAccesories()) {
+            System.out.println(i + " - " + accesory);
+            i++;
+        }
+
+        System.out.print("Wybierz numer akcesorium do usuniecia: ");
+        int removeOption = scanner.nextInt();
+        scanner.nextLine();
+
+        if (removeOption > 0 && removeOption <= smartphone.getAccesories().size()) {
+            String removed = smartphone.getAccesories().remove(removeOption - 1);
+            System.out.println("Usunieto akcesorium: " + removed);
+        } else {
+            System.err.println("Niepoprawny numer");
+        }
+    }
+
+    private void displayConfiguration(Smartphone smartphone) {
+        System.out.println("\nAktualna konfiguracja:");
+        System.out.println("Kolor: " + (smartphone.getColor() != null ? smartphone.getColor() : "Nie wybrano"));
+        System.out.println("Akcesoria: " + (smartphone.getAccesories().isEmpty() ? "Brak" : smartphone.getAccesories()));
+    }
+
+    private void addAccessory(Smartphone smartphone) {
+        System.out.println("\nDostepne akcesoria:");
+        for (SmartphoneAccesories accessory : SmartphoneAccesories.values()) {
+            System.out.println(accessory.getOption() + " - " + accessory.name() + " (Cena: " + accessory.getPrice() + " zł)");
+        }
+
+        System.out.print("Wybierz akcesorium (numer): ");
+        int accesoryOption = scanner.nextInt();
+        scanner.nextLine();
+
+        for (SmartphoneAccesories accessory : SmartphoneAccesories.values()) {
+            if (accessory.getOption() == accesoryOption) {
+                if (smartphone.getAccesories().contains(accessory.name())) {
+                    System.out.println("Juz bylo dodane");
+                } else {
+                    smartphone.addAcceossory(accessory.name());
+                    System.out.println("Dodano akcesorium: " + accessory.name());
+                }
+                return;
+            }
+        }
+        System.err.println("Niepoprawna opcja");
+    }
+
+    private void selectColor(Smartphone smartphone) {
+        System.out.println("Wybierz kolor smartfona:");
+        for (SmartphoneColors color : SmartphoneColors.values()) {
+            System.out.println(color.getOption() + " - " + color.getColor());
+        }
+
+        System.out.print("Wybierz opcję: ");
+        int colorOption = scanner.nextInt();
+        scanner.nextLine();
+
+        for (SmartphoneColors color : SmartphoneColors.values()) {
+            if (color.getOption() == colorOption) {
+                smartphone.setColor(color.getColor());
+                System.out.println("Wybrano kolor: " + color.getColor());
+                return;
+            }
+        }
     }
 
     /**

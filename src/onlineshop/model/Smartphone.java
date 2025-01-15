@@ -41,6 +41,14 @@ public class Smartphone extends Product{
         this.accesories = accesories;
     }
 
+    public void addAcceossory(String accessory) {
+        accesories.add(accessory);
+    }
+
+    public boolean removeAccessory(String accessory) {
+        return accesories.remove(accessory);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
