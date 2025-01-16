@@ -15,7 +15,6 @@ public class CommandLineService {
     Cart cart = new Cart();
     Scanner scanner = new Scanner(System.in);
     OrderProcessor orderProcessor = new OrderProcessor(5);
-    OrderRepository orderRepository = new OrderRepository();
     ProductConfigurationService productConfigurationService = new ProductConfigurationService(scanner);
     /**
      * Uruchamia aplikacje.
