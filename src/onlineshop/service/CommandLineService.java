@@ -3,7 +3,6 @@ package onlineshop.service;
 import onlineshop.exceptions.ProductOutOfStockException;
 import onlineshop.model.*;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -81,7 +80,7 @@ public class CommandLineService {
             optionalProduct.ifPresentOrElse(
                     product -> {
                         try {
-                            cart.addProduct(product);
+                            cart.addProductToCart(product);
                         } catch (ProductOutOfStockException e) {
                             System.err.println("Błąd: " + e.getMessage());
                         }
@@ -103,7 +102,7 @@ public class CommandLineService {
         Optional<Product> optionalProduct = productManager.findProductById(cart.getProducts(), productId);
 
         optionalProduct.ifPresentOrElse(
-                product -> cart.removeProduct(product),
+                product -> cart.removeProductFromCart(product),
                 () -> System.err.println("Nie ma produktu z tym ID")
         );
     }
