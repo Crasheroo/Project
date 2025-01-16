@@ -150,4 +150,27 @@ public class Order {
     public int hashCode() {
         return Objects.hash(orderId, customerName, customerEmail, products, totalPrice);
     }
+
+    @Override
+    public String toString() {
+        String message = String.format(
+                "ID zamówienia: %s\nKlient: %s, email: %s\nData zamówienia: %s\nProdukty w zamówieniu:\n",
+                orderId,
+                customerName,
+                customerEmail,
+                orderDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z"))
+        );
+
+        String produkty = getProducts().stream()
+                .map(product -> String.format("- %s", product))
+                .collect(Collectors.joining("\n"));
+
+        String rest = String.format(
+                "\nZastosowany rabat: %.2f zł\nŁączna kwota zamówienia: %.2f zł",
+                discountValue,
+                totalPrice
+        );
+
+        return message + produkty + rest;
+    }
 }

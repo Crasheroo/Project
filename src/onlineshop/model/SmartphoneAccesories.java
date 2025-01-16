@@ -5,27 +5,19 @@ public enum SmartphoneAccesories {
     lead(2, 20),
     phoneCase(3, 50);
 
-    private int option;
+    private int id;
     private double price;
 
-    SmartphoneAccesories(int option, double price) {
-        this.option = option;
+    SmartphoneAccesories(int id, double price) {
+        this.id = id;
         this.price = price;
     }
 
-    public int getOption() {
-        return option;
-    }
-
-    public void setOption(int option) {
-        this.option = option;
+    public int getId() {
+        return id;
     }
 
     public double getPrice() {
         return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 }

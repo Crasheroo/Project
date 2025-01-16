@@ -17,7 +17,6 @@ import java.util.concurrent.Executors;
 public class OrderProcessor {
     private final ExecutorService executorService;
     private final OrderRepository orderRepository;
-    CommandLineService commandLineService = new CommandLineService();
 
     public OrderProcessor(int numberOfThreads) {
         this.executorService = Executors.newFixedThreadPool(numberOfThreads);
@@ -46,7 +45,7 @@ public class OrderProcessor {
      */
     private void processOrder(Order order) {
         try {
-            commandLineService.displayOrderDetails();
+            System.out.println(order.toString());
             generateInvoice(order);
         } catch (Exception e) {
             throw new OrderProcessingException("Problem podczas robienia zamowienia: " + e.getMessage());

@@ -176,20 +176,6 @@ public class CommandLineService {
     }
 
     /**
-     * Wyswietla szczegóły zamówienia w konsoli.
-     */
-    public void displayOrderDetails() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
-        System.out.println("ID zamówienia: " + order.getOrderId());
-        System.out.println("Klient: " + order.getCustomerName() + " email: " + order.getCustomerEmail());
-        System.out.println("Data zamówienia: " + order.getOrderDate().format(formatter));
-        System.out.println("Produkty w zamówieniu:");
-        order.getProducts().forEach(System.out::println);
-        System.out.println("Zastosowany rabat: " + order.getDiscountValue() + " zł");
-        System.out.println("Łączna kwota zamówienia: " + order.getTotalPrice() + " zł");
-    }
-
-    /**
      * Zamyka aplikacje.
      */
     private void exit() {

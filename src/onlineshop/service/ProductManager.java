@@ -14,9 +14,14 @@ public class ProductManager {
     }
 
     public void fillDefaultData() {
-        addProduct(new Computer(1, "Laptop gejmingowy", 10000, 2, "", 6));
-        addProduct(new Smartphone(2, "Samsong", 3000, 10, "", 2137));
-        addProduct(new Electronics(3, "Telewizor", 1200, 50));
+        addProduct(new Computer(1, "Laptop gejmingowy", 10000, 2, "Intel i7", 16));
+        addProduct(new Computer(2, "Ultrabook biznesowy", 8000, 3, "Intel i5", 8));
+
+        addProduct(new Smartphone(3, "Samsong Galaxy", 3000, 10, "Czarny", 4500));
+        addProduct(new Smartphone(4, "iPhone 15", 7000, 5, "Biały", 5000));
+
+        addProduct(new Electronics(5, "Telewizor 4K", 1200, 50));
+        addProduct(new Electronics(6, "Kamera internetowa", 250, 30));
     }
 
     public void addProduct(Product product) {

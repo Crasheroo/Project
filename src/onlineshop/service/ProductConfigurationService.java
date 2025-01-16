@@ -2,8 +2,6 @@ package onlineshop.service;
 
 import onlineshop.model.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -47,6 +45,9 @@ public class ProductConfigurationService {
         }
     }
 
+    /**
+     * Funckja do usuwania akcesoriow poprzez id o ile sa one dostepne.
+     */
     private void removeAccessory(Smartphone smartphone) {
         if (smartphone.getAccesories().isEmpty()) {
             System.out.println("Brak akcesoriow do usuniecia");
@@ -72,16 +73,13 @@ public class ProductConfigurationService {
         }
     }
 
-    private void displayConfiguration(Smartphone smartphone) {
-        System.out.println("\nAktualna konfiguracja:");
-        System.out.println("Kolor: " + (smartphone.getColor() != null ? smartphone.getColor() : "Nie wybrano"));
-        System.out.println("Akcesoria: " + (smartphone.getAccesories().isEmpty() ? "Brak" : smartphone.getAccesories()));
-    }
-
+    /**
+     * Funkcja dodawania akcesoriow poprzez ich id
+     */
     private void addAccessory(Smartphone smartphone) {
         System.out.println("\nDostepne akcesoria:");
         for (SmartphoneAccesories accessory : SmartphoneAccesories.values()) {
-            System.out.println(accessory.getOption() + " - " + accessory.name() + " (Cena: " + accessory.getPrice() + " zł)");
+            System.out.println(accessory.getId() + " - " + accessory.name() + " (Cena: " + accessory.getPrice() + " zł)");
         }
 
         System.out.print("Wybierz akcesorium (numer): ");
@@ -89,7 +87,7 @@ public class ProductConfigurationService {
         scanner.nextLine();
 
         for (SmartphoneAccesories accessory : SmartphoneAccesories.values()) {
-            if (accessory.getOption() == accesoryOption) {
+            if (accessory.getId() == accesoryOption) {
                 if (smartphone.getAccesories().contains(accessory.name())) {
                     System.out.println("Juz bylo dodane");
                 } else {
@@ -102,10 +100,13 @@ public class ProductConfigurationService {
         System.err.println("Niepoprawna opcja");
     }
 
+    /**
+     * Funkcja dodawania koloru telefonu poprzez nazwe
+     */
     private void selectColor(Smartphone smartphone) {
         System.out.println("Wybierz kolor smartfona:");
         for (SmartphoneColors color : SmartphoneColors.values()) {
-            System.out.println(color.getOption() + " - " + color.getColor());
+            System.out.println(color.getId() + " - " + color.getColor());
         }
 
         System.out.print("Wybierz opcję: ");
@@ -113,7 +114,7 @@ public class ProductConfigurationService {
         scanner.nextLine();
 
         for (SmartphoneColors color : SmartphoneColors.values()) {
-            if (color.getOption() == colorOption) {
+            if (color.getId() == colorOption) {
                 smartphone.setColor(color.getColor());
                 System.out.println("Wybrano kolor: " + color.getColor());
                 return;
@@ -125,14 +126,58 @@ public class ProductConfigurationService {
      * Konfiguruje komputer znajdujacy sie w koszuku.
      */
     private void configureComputer(Computer computer, Cart cart) {
+        System.out.println("Konfigurowanie komputera.");
+        while (true) {
+            System.out.println("1 - Zmien procesor");
+            System.out.println("2 - Zmien ilosc RAM");
+            System.out.println("3 - Wyswietl konfiguracje");
+            System.out.println("0 - Wyjdz");
+            System.out.print("Wybierz opcje: ");
+
+            int option = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (option) {
+                case 0 -> {
+                    System.out.println("Koniec konfiguracji");
+                    cart.updateComputer(computer.getId(), computer.getProcessor(), computer.getAmountOfRam());
+                    return;
+                }
+                case 1 -> changeProcessor(computer);
+                case 2 -> changeRam(computer);
+                case 3 -> displayConfiguration(computer);
+                default -> System.err.println("Niepoprawna opcja");
+            }
+        }
+    }
+
+    private void displayConfiguration(Product product) {
+        if (product instanceof Computer computer) {
+            System.out.println("\nAktualna konfiguracja komputera:");
+            System.out.println("Procesor: " + computer.getProcessor());
+            System.out.println("RAM: " + computer.getAmountOfRam() + " GB");
+        } else if (product instanceof Smartphone smartphone) {
+            System.out.println("\nAktualna konfiguracja:");
+            System.out.println("Kolor: " + (smartphone.getColor() != null ? smartphone.getColor() : "Nie wybrano"));
+            System.out.println("Akcesoria: " + (smartphone.getAccesories().isEmpty() ? "Brak" : smartphone.getAccesories()));
+        } else {
+            System.err.println("Nieznany typ produktu");
+        }
+    }
+
+    private void changeProcessor(Computer computer) {
         System.out.print("Podaj nowy procesor: ");
         String newProcessor = scanner.nextLine();
+        computer.setProcessor(newProcessor);
+        System.out.println("Procesor zostal zmienony na: " + newProcessor);
+    }
 
+    private void changeRam(Computer computer) {
         System.out.print("Podaj nową ilosc RAM (GB): ");
         int newRam = scanner.nextInt();
         scanner.nextLine();
-
-        cart.updateComputer(computer.getId(), newProcessor, newRam);
+        computer.setAmountOfRam(newRam);
+        System.out.println("RAM zostal zmieniony na: " + newRam + " GB");
     }
 
     /**
