@@ -21,9 +21,9 @@ public class Cart {
     }
 
     /**
-     * Dodaje produkt do koszyka.
-     * Zmniejsza liczbe dostepnych sztuk produktu w magazynie o 1
-     */
+    * Dodaje produkt do koszyka.
+    * Zmniejsza liczbe dostepnych sztuk produktu w magazynie o 1
+    */
     public void addProductToCart(Product product) {
         if (product.getItemsAvailable() <= 0) {
             throw new ProductOutOfStockException("Produktu " + product.getName() + " nie ma w magazynie");
@@ -66,7 +66,7 @@ public class Cart {
                 .filter(p -> p.getId() == productId)
                 .findFirst();
 
-        if (productOptional.isPresent()) {
+        if (productOptional.isPresent() ) {
             Smartphone smartphone = (Smartphone) productOptional.get();
             smartphone.getAccesories().addAll(accesories);
             System.out.println("Dodano akcesoria dla " + smartphone.getName());
@@ -77,6 +77,7 @@ public class Cart {
 
     /**
      * Konfiguruje komputer znajdujący się w koszyku, zmieniając jego procesor i ilość RAM.
+     *
      */
     public void updateComputer(int productId, String newProcessor, int newRam) {
         Optional<Product> productOptional = products.stream()
