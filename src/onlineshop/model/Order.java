@@ -21,6 +21,8 @@ public class Order {
     private double discountValue;
     private ZonedDateTime orderDate;
 
+    public Order() {}
+
     public Order(int orderId, String customerName, String customerEmail, List<Product> products) {
         this.orderId = orderId;
         this.customerName = customerName;
@@ -61,20 +63,6 @@ public class Order {
             this.totalPrice = calculateTotalPrice();
             System.out.println("Zastosowano rabat: " + this.discountValue + " zł");
         }
-    }
-
-    /**
-     * Wyswietla szczegóły zamówienia w konsoli.
-     */
-    public void displayOrderDetails() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
-        System.out.println("ID zamówienia: " + orderId);
-        System.out.println("Klient: " + customerName + " email: " + customerEmail);
-        System.out.println("Data zamówienia: " + orderDate.format(formatter));
-        System.out.println("Produkty w zamówieniu:");
-        products.forEach(System.out::println);
-        System.out.println("Zastosowany rabat: " + discountValue + " zł");
-        System.out.println("Łączna kwota zamówienia: " + totalPrice + " zł");
     }
 
     /**
