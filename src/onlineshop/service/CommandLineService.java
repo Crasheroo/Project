@@ -141,7 +141,6 @@ public class CommandLineService {
             }
 
             orderProcessor.processOrderAsync(order);
-            orderRepository.saveOrder(order);
             cart.clearCart();
             System.out.println("Zamowienie zostalo zlozone.");
             exit();
