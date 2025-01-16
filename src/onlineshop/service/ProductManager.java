@@ -37,16 +37,6 @@ public class ProductManager {
         System.out.println("Produkt usunięty: ID " + id);
     }
 
-    public void updateProduct(int id, Product product) {
-        for (int i = 0; i < products.size(); i++) {
-            if (products.get(i).getId() == id) {
-                products.set(i, product);
-                System.out.println("Produkt zaaktualizowany: ID " + id);
-                return;
-            }
-        }
-        System.out.println("Produkt o ID " + id + " nie został odnaleziony.");
-    }
 
     public void displayProducts() {
         if (products.isEmpty()) {

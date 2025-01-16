@@ -18,8 +18,6 @@ public class CommandLineService {
     OrderProcessor orderProcessor = new OrderProcessor(5);
     OrderRepository orderRepository = new OrderRepository();
     ProductConfigurationService productConfigurationService = new ProductConfigurationService(scanner);
-    Order order = new Order();
-
     /**
      * Uruchamia aplikacje.
      */
@@ -33,33 +31,37 @@ public class CommandLineService {
      */
     private void handleUserMenu() {
         while (true) {
-            System.out.println();
-            System.out.println("1. Wyświetl dostępne produkty");
-            System.out.println("2. Dodaj produkt do koszyka");
-            System.out.println("3. Wyświetl koszyk");
-            System.out.println("4. Usuń produkt z koszyka");
-            System.out.println("5. Złóż zamówienie");
-            System.out.println("6. Konfiguruj produkt z koszyka");
-            System.out.println("7. Wyjdz");
+            try {
+                System.out.println();
+                System.out.println("1. Wyświetl dostępne produkty");
+                System.out.println("2. Dodaj produkt do koszyka");
+                System.out.println("3. Wyświetl koszyk");
+                System.out.println("4. Usuń produkt z koszyka");
+                System.out.println("5. Złóż zamówienie");
+                System.out.println("6. Konfiguruj produkt z koszyka");
+                System.out.println("7. Wyjdz");
 
-            int option = scanner.nextInt();
-            scanner.nextLine();
+                int option = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (option) {
-                case 1 -> {
-                    System.out.println("Dostepne produkty");
-                    productManager.displayProducts();
+                switch (option) {
+                    case 1 -> {
+                        System.out.println("Dostepne produkty");
+                        productManager.displayProducts();
+                    }
+                    case 2 -> addProductToCart();
+                    case 3 -> {
+                        System.out.println("Koszyk");
+                        cart.displayCart();
+                    }
+                    case 4 -> removeProductFromCart();
+                    case 5 -> placeOrder();
+                    case 6 -> configureProduct();
+                    case 7 -> exit();
+                    default -> System.out.println("Wybierz inna opcje");
                 }
-                case 2 -> addProductToCart();
-                case 3 -> {
-                    System.out.println("Koszyk");
-                    cart.displayCart();
-                }
-                case 4 -> removeProductFromCart();
-                case 5 -> placeOrder();
-                case 6 -> configureProduct();
-                case 7 -> exit();
-                default -> System.out.println("Wybierz inna opcje");
+            } catch (NumberFormatException e) {
+                System.err.println("Wprowadz liczbe");
             }
         }
     }
@@ -68,22 +70,26 @@ public class CommandLineService {
      * Dodaje produkt do koszyka na podstawie podanego ID produktu.
      */
     private void addProductToCart() {
-        productManager.displayProducts();
-        System.out.print("Podaj ID produktu zeby dodac go do koszyka: ");
-        int productId = scanner.nextInt();
-        scanner.nextLine();
+        try {
+            productManager.displayProducts();
+            System.out.print("Podaj ID produktu zeby dodac go do koszyka: ");
+            int productId = scanner.nextInt();
+            scanner.nextLine();
 
-        Optional<Product> optionalProduct = productManager.findProductById(productManager.getProducts(), productId);
+            Optional<Product> optionalProduct = productManager.findProductById(productManager.getProducts(), productId);
 
-        optionalProduct.ifPresentOrElse(
-                product -> {
-                    try {
-                        cart.addProduct(product);
-                    } catch (ProductOutOfStockException e) {
-                        System.err.println("Błąd: " + e.getMessage());
-                    }
-                }, () -> System.err.println("Nie ma produktu z tym ID")
-        );
+            optionalProduct.ifPresentOrElse(
+                    product -> {
+                        try {
+                            cart.addProduct(product);
+                        } catch (ProductOutOfStockException e) {
+                            System.err.println("Błąd: " + e.getMessage());
+                        }
+                    }, () -> System.err.println("Nie ma produktu z tym ID")
+            );
+        } catch (NumberFormatException e) {
+            System.err.println("Wprowadz liczbe");
+        }
     }
 
     /**
@@ -139,6 +145,7 @@ public class CommandLineService {
             orderRepository.saveOrder(order);
             cart.clearCart();
             System.out.println("Zamowienie zostalo zlozone.");
+            exit();
         }
     }
 
@@ -182,5 +189,6 @@ public class CommandLineService {
         System.out.println("Baj baj");
         scanner.close();
         orderProcessor.shutdown();
+        System.exit(0);
     }
 }
