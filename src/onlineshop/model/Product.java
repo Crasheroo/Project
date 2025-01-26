@@ -28,6 +28,10 @@ public class Product {
         }
     }
 
+    public List<ProductConfiguration> getConfigurations() {
+        return configurations;
+    }
+
     public void removeConfiguration (String type) {
         configurations.removeIf(config -> config.getType().equalsIgnoreCase(type));
     }

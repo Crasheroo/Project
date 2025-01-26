@@ -61,42 +61,6 @@ public class Cart {
     }
 
     /**
-     * Dodaje akcesoria do smartfona znajdujacego sie w koszyku.
-     */
-    public void updateCartAccesories(int productId, List<String> accesories) {
-        Optional<Product> productOptional = products.stream()
-                .filter(p -> p.getId() == productId)
-                .findFirst();
-
-        if (productOptional.isPresent() ) {
-            Smartphone smartphone = (Smartphone) productOptional.get();
-            smartphone.getAccesories().addAll(accesories);
-            System.out.println("Dodano akcesoria dla " + smartphone.getName());
-        } else {
-            System.err.println("Nie masz telefonu w koszyku.");
-        }
-    }
-
-    /**
-     * Konfiguruje komputer znajdujący się w koszyku, zmieniając jego procesor i ilość RAM.
-     *
-     */
-    public void updateComputer(int productId, String newProcessor, int newRam) {
-        Optional<Product> productOptional = products.stream()
-                .filter(p -> p.getId() == productId)
-                .findFirst();
-
-        if (productOptional.isPresent()) {
-            Computer computer = (Computer) productOptional.get();
-            computer.setProcessor(newProcessor);
-            computer.setAmountOfRam(newRam);
-            System.out.println("Komputer " + computer.getName() + " zostal skonfigurowany");
-        } else {
-            System.err.println("Nie znaleziono komputera z podanym id w koszyku");
-        }
-    }
-
-    /**
      * Oprocznia koszyk.
      */
     public synchronized void clearCart() {

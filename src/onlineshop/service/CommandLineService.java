@@ -16,6 +16,7 @@ public class CommandLineService {
     Scanner scanner = new Scanner(System.in);
     OrderProcessor orderProcessor = new OrderProcessor(5);
     ProductConfigurationService productConfigurationService = new ProductConfigurationService(scanner);
+
     /**
      * Uruchamia aplikacje.
      */
@@ -28,7 +29,9 @@ public class CommandLineService {
      * Obsluguje menu uzytkownika przez wybor roznych opcji zarzadzania sklepem internetowym.
      */
     private void handleUserMenu() {
-        while (true) {
+        boolean isRunning = true;
+
+        while (isRunning) {
             try {
                 System.out.println();
                 System.out.println("1. Wyświetl dostępne produkty");
@@ -55,11 +58,16 @@ public class CommandLineService {
                     case 4 -> removeProductFromCart();
                     case 5 -> placeOrder();
                     case 6 -> configureProduct();
-                    case 7 -> exit();
+                    case 7 -> {
+                        System.out.println("Baj baj");
+                        orderProcessor.shutdown();
+                        isRunning = false;
+                    }
                     default -> System.out.println("Wybierz inna opcje");
                 }
             } catch (NumberFormatException e) {
                 System.err.println("Wprowadz liczbe");
+                scanner.nextLine();
             }
         }
     }
@@ -150,15 +158,23 @@ public class CommandLineService {
      * Umozliwia konfiguracje wybranego produktu w koszyku.
      */
     private void configureProduct() {
-        System.out.print("Podaj ID produktu do konfiguracji: ");
-        int productId = scanner.nextInt();
-        scanner.nextLine();
+        while (true) {
+            cart.displayCart();
+            System.out.print("Podaj ID produktu do konfiguracji lub '0' aby wyjsc : ");
+            int productId = scanner.nextInt();
+            scanner.nextLine();
 
-        Optional<Product> optionalProduct = productManager.findProductById(cart.getProducts(), productId);
-        optionalProduct.ifPresentOrElse(
-                productConfigurationService::configureProduct,
-                () -> System.err.println("Nie znaleziono produktu o podanym ID")
-        );
+            if (productId == 0) {
+                System.out.println("Zakonczono konfiguracje");
+                break;
+            }
+
+            Optional<Product> optionalProduct = productManager.findProductById(cart.getProducts(), productId);
+            optionalProduct.ifPresentOrElse(
+                    productConfigurationService::configureProduct,
+                    () -> System.err.println("Nie znaleziono produktu o podanym ID")
+            );
+        }
     }
 
     /**
@@ -184,7 +200,7 @@ public class CommandLineService {
      */
     private void exit() {
         System.out.println("Baj baj");
-        scanner.close();
         orderProcessor.shutdown();
+        System.exit(0);
     }
 }

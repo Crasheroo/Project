@@ -17,11 +17,11 @@ public class ProductManager {
     }
 
     public void fillDefaultData() {
-        addProductAsync(new Computer(1, "Laptop gejmingowy", 10000, 2, "Intel i7", 16));
-        addProductAsync(new Computer(2, "Ultrabook biznesowy", 8000, 3, "Intel i5", 8));
+        addProductAsync(new Computer(1, "Laptop gejmingowy", 10000, 2, ProcessorType.INTEL_I7, RamType.RAM_8GB));
+        addProductAsync(new Computer(2, "Ultrabook biznesowy", 8000, 3, ProcessorType.INTEL_I5, RamType.RAM_16GB));
 
-        addProductAsync(new Smartphone(3, "Samsong Galaxy", 3000, 10, "Czarny", 4500));
-        addProductAsync(new Smartphone(4, "iPhone 15", 7000, 5, "Biały", 5000));
+        addProductAsync(new Smartphone(3, "Samsong Galaxy", 3000, 10, SmartphoneColors.black, 4500));
+        addProductAsync(new Smartphone(4, "iPhone 15", 7000, 5, SmartphoneColors.white, 5000));
 
         addProductAsync(new Electronics(5, "Telewizor 4K", 1200, 50));
         addProductAsync(new Electronics(6, "Kamera internetowa", 250, 30));

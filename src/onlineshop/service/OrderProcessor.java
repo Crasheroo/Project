@@ -56,23 +56,44 @@ public class OrderProcessor {
      * Generuje fakture jako plik tekstowy
      */
     private void generateInvoice(Order order) {
-        String fileName = "Faktura " + order.getOrderId() + ".txt";
+        String fileName = "Faktura_" + order.getOrderId() + ".txt";
 
         try (FileWriter writer = new FileWriter(fileName)) {
-            writer.write("Zamówienie ID: " + order.getOrderId() + "\n");
-            writer.write("Klient: " + order.getCustomerName() + " email: " + order.getCustomerEmail() + "\n");
-            writer.write("Data zamówienia: " + order.getOrderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "\n");
-            writer.write("Produkty:\n");
+            writer.write(String.format("Zamówienie ID: %d\n", order.getOrderId()));
+            writer.write(String.format("Klient: %s\n", order.getCustomerName()));
+            writer.write(String.format("Email: %s\n", order.getCustomerEmail()));
+            writer.write(String.format("Data zamówienia: %s\n\n",
+                    order.getOrderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
 
+            writer.write("Produkty:\n");
+            double totalNet = 0;
             for (Product product : order.getProducts()) {
-                writer.write(product.getName() + " cena: " + product.getPrice() + " zł\n");
+                double netPrice = product.getPrice() / 1.23;
+                writer.write(String.format("- %s, cena netto: %.2f zł, cena brutto: %.2f zł\n",
+                        product.getName(), netPrice, product.getPrice()));
+
+                if (!product.getConfigurations().isEmpty()) {
+                    writer.write("  Konfiguracje:\n");
+                    for (var config : product.getConfigurations()) {
+                        writer.write(String.format("    - %s: %s, cena: %.2f zł\n",
+                                config.getType(), config.getValue(), config.getPrice()));
+                    }
+                }
+
+                totalNet += netPrice;
             }
 
-            writer.write("Łączna kwota: " + order.getTotalPrice() + " zł \n");
+            double vat = totalNet * 0.23; // VAT 23%
+            double totalGross = totalNet + vat;
+            writer.write("\nPodsumowanie:\n");
+            writer.write(String.format("Suma netto: %.2f zł\n", totalNet));
+            writer.write(String.format("VAT (23%%): %.2f zł\n", vat));
+            writer.write(String.format("Suma brutto: %.2f zł\n", totalGross));
 
             System.out.println("Faktura wygenerowana: " + fileName);
         } catch (IOException e) {
-            throw new OrderProcessingException("Bląd generowania ffaktury: " + e.getMessage());
+            System.err.println("Błąd podczas generowania faktury: " + e.getMessage());
+            throw new OrderProcessingException("Błąd generowania faktury: " + e.getMessage());
         }
     }
 
@@ -81,6 +102,16 @@ public class OrderProcessor {
      */
     public void shutdown() {
         executorService.shutdown();
-        System.out.println("Procesor zostal zamkniety");
+        try {
+            if (!executorService.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS)) {
+                System.err.println("Nie udało się zakończyć wszystkich wątków w wyznaczonym czasie.");
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            System.err.println("Procesor został przerwany podczas oczekiwania na zakończenie wątków.");
+            executorService.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+        System.out.println("Procesor został zamknięty.");
     }
 }

@@ -6,31 +6,35 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Smartphone extends Product{
-    private String color;
+    private SmartphoneColors color;
     private int batteryCapacity;
-    private List<String> accesories;
+    private List<SmartphoneAccesories> accesories;
 
-    public Smartphone(int id, String name, double price, int amountOfAvailable, String color, int batteryCapacity) {
+    public Smartphone(int id, String name, double price, int amountOfAvailable, SmartphoneColors color, int batteryCapacity) {
         super(id, name, price, amountOfAvailable, "Smartphone");
         this.color = color;
         this.batteryCapacity = batteryCapacity;
         this.accesories = new ArrayList<>();
     }
 
-    public String getColor() {
-        return color;
+    public void addAccessory(SmartphoneAccesories accessory) {
+        accesories.add(accessory);
     }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public List<String> getAccesories() {
+    public List<SmartphoneAccesories> getAccesories() {
         return accesories;
     }
 
-    public void addAcceossory(String accessory) {
-        accesories.add(accessory);
+    public void setColor(SmartphoneColors color) {
+        this.color = color;
+    }
+
+    public void setBatteryCapacity(int batteryCapacity) {
+        this.batteryCapacity = batteryCapacity;
+    }
+
+    public void setAccesories(List<SmartphoneAccesories> accesories) {
+        this.accesories = accesories;
     }
 
     @Override
@@ -47,6 +51,14 @@ public class Smartphone extends Product{
 
     @Override
     public String toString() {
-        return "Smartfon: ID: " + getId() + ", nazwa: " + getName() + " z kolorem " + color + ", baterią: " + batteryCapacity + ", cena: " + getPrice();
+        String accessoriesInfo = accesories.isEmpty()
+                ? "Brak akcesoriów"
+                : accesories.stream()
+                .map(SmartphoneAccesories::name)
+                .reduce((a, b) -> a + ", " + b)
+                .orElse("Brak akcesoriów");
+
+        return String.format("Smartfon: ID: %d, nazwa: %s, kolor: %s, bateria: %dmAh, cena: %.2f zł, akcesoria: [%s]",
+                getId(), getName(), color, batteryCapacity, getPrice(), accessoriesInfo);
     }
 }

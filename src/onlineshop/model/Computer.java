@@ -1,48 +1,49 @@
 package onlineshop.model;
 
 import java.util.Objects;
-import java.util.Scanner;
 
 public class Computer extends Product {
-    private String processor;
-    private int amountOfRam;
+    private ProcessorType processor;
+    private RamType ram;
 
-    public Computer(int id, String name, double price, int amountOfAvailable, String processor, int amountOfRam) {
+    public Computer(int id, String name, double price, int amountOfAvailable, ProcessorType processor, RamType ram) {
         super(id, name, price, amountOfAvailable, "Computer");
         this.processor = processor;
-        this.amountOfRam = amountOfRam;
+        this.ram = ram;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(processor, amountOfRam);
+        return Objects.hash(processor, ram);
     }
 
-    public String getProcessor() {
-        return processor;
-    }
-
-    public void setProcessor(String processor) {
+    public void setProcessor(ProcessorType processor) {
         this.processor = processor;
     }
 
-    public int getAmountOfRam() {
-        return amountOfRam;
-    }
-
-    public void setAmountOfRam(int amountOfRam) {
-        this.amountOfRam = amountOfRam;
+    public void setRam(RamType ram) {
+        this.ram = ram;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Computer computer)) return false;
-        return amountOfRam == computer.amountOfRam && Objects.equals(processor, computer.processor);
+        return ram == computer.ram && Objects.equals(processor, computer.processor);
+    }
+
+    public ProcessorType getProcessor() {
+        return processor;
+    }
+
+    public RamType getRam() {
+        return ram;
     }
 
     @Override
     public String toString() {
-        return "Komputer: ID: " + getId() + ", nazwa: " + getName() + ", cena: " + getPrice() + ", procesor: " + processor + ", ram: " + amountOfRam + " GB";
+        return String.format("Komputer: ID: %d, nazwa: %s, cena: %.2f zł, procesor: %s, RAM: %s",
+                getId(), getName(), getPrice(), processor.getName(), ram.getSize());
     }
+
 }
