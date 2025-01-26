@@ -150,14 +150,14 @@ public class CommandLineService {
      * Umozliwia konfiguracje wybranego produktu w koszyku.
      */
     private void configureProduct() {
-        System.out.println("Podaj ID produktu");
+        System.out.print("Podaj ID produktu do konfiguracji: ");
         int productId = scanner.nextInt();
         scanner.nextLine();
 
         Optional<Product> optionalProduct = productManager.findProductById(cart.getProducts(), productId);
         optionalProduct.ifPresentOrElse(
-                product -> productConfigurationService.configureProduct(product, cart),
-                () -> System.err.println("Nie ma produktu z tym ID")
+                productConfigurationService::configureProduct,
+                () -> System.err.println("Nie znaleziono produktu o podanym ID")
         );
     }
 
@@ -186,6 +186,5 @@ public class CommandLineService {
         System.out.println("Baj baj");
         scanner.close();
         orderProcessor.shutdown();
-        System.exit(0);
     }
 }

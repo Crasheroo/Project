@@ -2,6 +2,7 @@ package onlineshop.service;
 
 import onlineshop.model.*;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -183,13 +184,64 @@ public class ProductConfigurationService {
     /**
      * Tu rozpoczyna proces konfiguracji dla podanego produktu.
      */
-    public void configureProduct(Product product, Cart cart) {
-        if (product instanceof Smartphone smartphone) {
-            configureSmartphone(smartphone, cart);
-        } else if (product instanceof Computer computer) {
-            configureComputer(computer, cart);
-        } else {
-            System.err.println("Nie ma konfiguracji dla tego typu produktu");
+//    public void configureProduct(Product product, Cart cart) {
+//        if (product instanceof Smartphone smartphone) {
+//            configureSmartphone(smartphone, cart);
+//        } else if (product instanceof Computer computer) {
+//            configureComputer(computer, cart);
+//        } else {
+//            System.err.println("Nie ma konfiguracji dla tego typu produktu");
+//        }
+//    }
+
+    public void configureProduct(Product product) {
+        List<ProductConfiguration> availableConfigurations = ConfigurationStore.getConfigurations(product.getType());
+        if (availableConfigurations.isEmpty()) {
+            System.err.println("Brak dostepnych konfiguracji dla typu produktu: " + product.getType());
+            return;
+        }
+
+        while (true) {
+            System.out.println("Konfigurowanie produktu: " + product.getName());
+            System.out.println("1 - Wybierz konfiguracje");
+            System.out.println("2 - Wyswietl aktualne konfiguracje");
+            System.out.println("0 - Wyjdź");
+            System.out.print("Wybierz opcję: ");
+
+            int option = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (option) {
+                case 0 -> {
+                    System.out.println("Zakonczono konfiguracje");
+                    return;
+                }
+                case 1 -> chooseConfiguration(product, availableConfigurations);
+                case 2 -> product.displayConfigurations();
+                default -> System.err.println("Niepoprawna opcja");
+            }
         }
     }
+
+    private void chooseConfiguration(Product product, List<ProductConfiguration> availableConfigurations) {
+        System.out.println("Dostepne konfiguracje:");
+        for (int i = 0; i < availableConfigurations.size(); i++) {
+            ProductConfiguration config = availableConfigurations.get(i);
+            System.out.println((i + 1) + " - " + config);
+        }
+
+        System.out.print("Wybierz numer konfiguracji: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        if (choice > 0 && choice <= availableConfigurations.size()) {
+            ProductConfiguration selectedConfig = availableConfigurations.get(choice - 1);
+            product.addConfiguration(selectedConfig);
+            System.out.println("Dodano konfiguracje: " + selectedConfig);
+        } else {
+            System.err.println("Niepoprawny numer");
+        }
+    }
+
+
 }

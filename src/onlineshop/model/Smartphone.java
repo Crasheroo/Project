@@ -11,7 +11,7 @@ public class Smartphone extends Product{
     private List<String> accesories;
 
     public Smartphone(int id, String name, double price, int amountOfAvailable, String color, int batteryCapacity) {
-        super(id, name, price, amountOfAvailable);
+        super(id, name, price, amountOfAvailable, "Smartphone");
         this.color = color;
         this.batteryCapacity = batteryCapacity;
         this.accesories = new ArrayList<>();
@@ -25,28 +25,12 @@ public class Smartphone extends Product{
         this.color = color;
     }
 
-    public int getBatteryCapacity() {
-        return batteryCapacity;
-    }
-
-    public void setBatteryCapacity(int batteryCapacity) {
-        this.batteryCapacity = batteryCapacity;
-    }
-
     public List<String> getAccesories() {
         return accesories;
     }
 
-    public void setAccesories(List<String> accesories) {
-        this.accesories = accesories;
-    }
-
     public void addAcceossory(String accessory) {
         accesories.add(accessory);
-    }
-
-    public boolean removeAccessory(String accessory) {
-        return accesories.remove(accessory);
     }
 
     @Override
@@ -63,6 +47,6 @@ public class Smartphone extends Product{
 
     @Override
     public String toString() {
-        return "Smartfon: ID: " + getId() + ", nazwa: " + getName() + " z kolorem " + color + ", baterią: " + batteryCapacity + " mAh i akcesoriami: " + accesories + ", cena: " + getPrice();
+        return "Smartfon: ID: " + getId() + ", nazwa: " + getName() + " z kolorem " + color + ", baterią: " + batteryCapacity + ", cena: " + getPrice();
     }
 }
