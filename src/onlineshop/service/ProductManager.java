@@ -83,25 +83,6 @@ public class ProductManager {
                 .findFirst();
     }
 
-    public void addProductConfiguration(int productId, ProductConfiguration config) {
-        Optional<Product> optionalProduct = findProductById(products, productId);
-        optionalProduct.ifPresentOrElse(
-                product -> {
-                    product.addConfiguration(config);
-                    System.out.println("Dodano konfiguracje do produktu: " + product.getName());
-                },
-                () -> System.err.println("Nie znaleziono produktu o ID: " + productId)
-        );
-    }
-
-    public void displayProductConfigurations(int productId) {
-        Optional<Product> optionalProduct = findProductById(products, productId);
-        optionalProduct.ifPresentOrElse(
-                Product::displayConfigurations,
-                () -> System.err.println("Nie znaleziono produktu o ID: " + productId)
-        );
-    }
-
     public int generateOrderId() {
         return (int) (Math.random() * 1000);
     }
