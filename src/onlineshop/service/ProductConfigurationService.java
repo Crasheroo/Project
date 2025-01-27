@@ -86,6 +86,9 @@ public class ProductConfigurationService {
         for (SmartphoneColors color : SmartphoneColors.values()) {
             if (color.getId() == choice) {
                 smartphone.setColor(color);
+                ProductConfiguration config = new ProductConfiguration("Color", color.getColor(), 0.0);
+                smartphone.addConfiguration(config);
+
                 System.out.printf("Zmieniono kolor na: %s%n", color.getColor());
                 return;
             }
@@ -108,6 +111,9 @@ public class ProductConfigurationService {
         for (SmartphoneAccesories accessory : SmartphoneAccesories.values()) {
             if (accessory.getId() == choice) {
                 smartphone.addAccessory(accessory);
+                ProductConfiguration config = new ProductConfiguration("Accessory", accessory.name(), accessory.getPrice());
+                smartphone.addConfiguration(config);
+
                 System.out.printf("Dodano akcesorium: %s%n", accessory.name());
                 return;
             }
@@ -129,8 +135,12 @@ public class ProductConfigurationService {
         scanner.nextLine();
 
         try {
-            computer.setProcessor(ProcessorType.fromId(choice));
-            System.out.printf("Zmieniono procesor na: %s%n", computer.getProcessor().getName());
+            ProcessorType selectedProcessor = ProcessorType.fromId(choice);
+            computer.setProcessor(selectedProcessor);
+            ProductConfiguration config = new ProductConfiguration("Processor", selectedProcessor.getName(), selectedProcessor.getPrice());
+            computer.addConfiguration(config);
+
+            System.out.printf("Zmieniono procesor na: %s%n", selectedProcessor.getName());
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }
@@ -149,8 +159,12 @@ public class ProductConfigurationService {
         scanner.nextLine();
 
         try {
-            computer.setRam(RamType.fromId(choice));
-            System.out.printf("Zmieniono RAM na: %s%n", computer.getRam().getSize());
+            RamType selectedRam = RamType.fromId(choice);
+            computer.setRam(selectedRam);
+            ProductConfiguration config = new ProductConfiguration("RAM", selectedRam.getSize(), selectedRam.getPrice());
+            computer.addConfiguration(config);
+
+            System.out.printf("Zmieniono RAM na: %s%n", selectedRam.getSize());
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }

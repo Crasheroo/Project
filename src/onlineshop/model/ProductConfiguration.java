@@ -11,7 +11,6 @@ public class ProductConfiguration {
         this.price = price;
     }
 
-
     public String getType() {
         return type;
     }

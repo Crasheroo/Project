@@ -9,16 +9,23 @@ public class Smartphone extends Product{
     private SmartphoneColors color;
     private int batteryCapacity;
     private List<SmartphoneAccesories> accesories;
+    private List<ProductConfiguration> configurations;
 
     public Smartphone(int id, String name, double price, int amountOfAvailable, SmartphoneColors color, int batteryCapacity) {
         super(id, name, price, amountOfAvailable, "Smartphone");
         this.color = color;
         this.batteryCapacity = batteryCapacity;
         this.accesories = new ArrayList<>();
+        this.configurations = new ArrayList<>();
+    }
+
+    public void addConfiguration(ProductConfiguration configuration) {
+        configurations.add(configuration);
     }
 
     public void addAccessory(SmartphoneAccesories accessory) {
         accesories.add(accessory);
+        addConfiguration(new ProductConfiguration("Accessory", accessory.name(), accessory.getPrice()));
     }
 
     public List<SmartphoneAccesories> getAccesories() {
@@ -27,6 +34,7 @@ public class Smartphone extends Product{
 
     public void setColor(SmartphoneColors color) {
         this.color = color;
+        addConfiguration(new ProductConfiguration("Color", color.getColor(), 0.0));
     }
 
     public void setBatteryCapacity(int batteryCapacity) {
@@ -42,6 +50,11 @@ public class Smartphone extends Product{
         if (this == o) return true;
         if (!(o instanceof Smartphone that)) return false;
         return batteryCapacity == that.batteryCapacity && Objects.equals(color, that.color) && Objects.equals(accesories, that.accesories);
+    }
+
+    @Override
+    public List<ProductConfiguration> getConfigurations() {
+        return configurations;
     }
 
     @Override

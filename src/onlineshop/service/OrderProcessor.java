@@ -3,10 +3,14 @@ package onlineshop.service;
 import onlineshop.exceptions.OrderProcessingException;
 import onlineshop.model.Order;
 import onlineshop.model.Product;
+import onlineshop.model.ProductConfiguration;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -67,24 +71,27 @@ public class OrderProcessor {
 
             writer.write("Produkty:\n");
             double totalNet = 0;
+
             for (Product product : order.getProducts()) {
-                double netPrice = product.getPrice() / 1.23;
+                double netPrice = Math.round((product.getPrice() / 1.23) * 100.0) / 100.0;
                 writer.write(String.format("- %s, cena netto: %.2f zł, cena brutto: %.2f zł\n",
                         product.getName(), netPrice, product.getPrice()));
 
                 if (!product.getConfigurations().isEmpty()) {
                     writer.write("  Konfiguracje:\n");
-                    for (var config : product.getConfigurations()) {
-                        writer.write(String.format("    - %s: %s, cena: %.2f zł\n",
-                                config.getType(), config.getValue(), config.getPrice()));
+                    Map<String, Double> groupedConfigs = groupConfigurations(product.getConfigurations());
+
+                    for (var entry : groupedConfigs.entrySet()) {
+                        writer.write(String.format("    - %s, cena: %.2f zł\n", entry.getKey(), entry.getValue()));
                     }
                 }
 
                 totalNet += netPrice;
             }
 
-            double vat = totalNet * 0.23; // VAT 23%
-            double totalGross = totalNet + vat;
+            double vat = Math.round(totalNet * 0.23 * 100.0) / 100.0; // VAT 23%
+            double totalGross = Math.round((totalNet + vat) * 100.0) / 100.0;
+
             writer.write("\nPodsumowanie:\n");
             writer.write(String.format("Suma netto: %.2f zł\n", totalNet));
             writer.write(String.format("VAT (23%%): %.2f zł\n", vat));
@@ -95,6 +102,18 @@ public class OrderProcessor {
             System.err.println("Błąd podczas generowania faktury: " + e.getMessage());
             throw new OrderProcessingException("Błąd generowania faktury: " + e.getMessage());
         }
+    }
+
+    /**
+     * Grupuje konfiguracje według typu i wartości, sumując ich ceny.
+     */
+    private Map<String, Double> groupConfigurations(List<ProductConfiguration> configurations) {
+        Map<String, Double> groupedConfigs = new LinkedHashMap<>();
+        for (ProductConfiguration config : configurations) {
+            String key = String.format("%s: %s", config.getType(), config.getValue());
+            groupedConfigs.put(key, groupedConfigs.getOrDefault(key, 0.0) + config.getPrice());
+        }
+        return groupedConfigs;
     }
 
     /**
