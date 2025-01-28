@@ -37,7 +37,17 @@ public class Order {
      * Tworzy zamówienie na podstawie koszyka.
      */
     public Order(int orderId, String customerName, String customerEmail, Cart cart) {
-        this(orderId, customerName, customerEmail, new ArrayList<>(cart.getProducts()));
+        this.orderId = orderId;
+        this.customerName = customerName;
+        this.customerEmail = customerEmail;
+
+        this.products = cart.getItems().stream()
+                .map(CartItem::getProduct)
+                .collect(Collectors.toList());
+
+        this.discountValue = 0.0;
+        this.totalPrice = calculateTotalPrice();
+        this.orderDate = ZonedDateTime.now();
     }
 
     /**
@@ -65,78 +75,28 @@ public class Order {
         }
     }
 
-    /**
-     * Formatuje zamówienie do zapisania w pliku.
-     */
-    public String formatOrder(Order order) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        return String.format("Zamowienie ID: %d\n" +
-                        "Klient: %s email: %s\n" +
-                        "Data zamowienia: %s\n" +
-                        "Produkty:\n%s" +
-                        "Laczna kwota: %.2f zl\n",
-                order.getOrderId(),
-                order.getCustomerName(),
-                order.getCustomerEmail(),
-                order.getOrderDate().format(formatter),
-                order.getProducts().stream()
-                        .map(product -> String.format("%s, cena: %.2f zł\n", product.getName(), product.getPrice()))
-                        .collect(Collectors.joining()),
-                order.getTotalPrice());
-    }
-
     public ZonedDateTime getOrderDate() {
         return orderDate;
-    }
-
-    public void setOrderDate(ZonedDateTime orderDate) {
-        this.orderDate = orderDate;
     }
 
     public int getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
-
     public String getCustomerName() {
         return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
     }
 
     public String getCustomerEmail() {
         return customerEmail;
     }
 
-    public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
-    }
-
     public List<Product> getProducts() {
         return products;
     }
 
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
     public double getDiscountValue() {
         return discountValue;
-    }
-
-    public void setDiscountValue(double discountValue) {
-        this.discountValue = discountValue;
     }
 
     @Override

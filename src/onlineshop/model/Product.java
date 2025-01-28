@@ -7,55 +7,24 @@ public class Product {
     private int id;
     private String name;
     private double price;
-    private int itemsAvailable;
-    private String type;
+    private int stock;
+    private Type type;
     private List<ProductConfiguration> configurations;
 
-    public Product(int id, String name, double price, int itemsAvailable, String type) {
+    public Product(int id, String type, String name, double price, int stock, List<ProductConfiguration> configurations) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.itemsAvailable = itemsAvailable;
-        this.type = type;
-        this.configurations = new ArrayList<>();
-    }
-
-    public void addConfiguration (ProductConfiguration config) {
-        if (configurations.contains(config)) {
-            System.out.println("Konfiguracja juz istnieje: " + config);
-        } else {
-            configurations.add(config);
-        }
+        this.stock = stock;
+        this.configurations = configurations;
     }
 
     public List<ProductConfiguration> getConfigurations() {
         return configurations;
     }
 
-    public void removeConfiguration (String type) {
-        configurations.removeIf(config -> config.getType().equalsIgnoreCase(type));
-    }
-
-    public void displayConfigurations() {
-        if (configurations.isEmpty()) {
-            System.err.println("Brak konfiguracji dla produktu: " + name);
-        } else {
-            configurations.forEach(config ->
-                    System.out.println(config.getType() + ": " + config.getValue() + "(+ " + config.getPrice() + " zł")
-            );
-        }
-    }
-
-    public String getType() {
-        return type;
-    }
-
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -66,17 +35,34 @@ public class Product {
         return price;
     }
 
-    public int getItemsAvailable() {
-        return itemsAvailable;
+    public int getStock() {
+        return stock;
     }
 
-    public void setItemsAvailable(int itemsAvailable) {
-        this.itemsAvailable = itemsAvailable;
+    public boolean isInStock (int quantity) {
+        return stock >= quantity;
     }
 
-    public double getTotalPrice() {
-        return price + configurations.stream()
-                .mapToDouble(ProductConfiguration::getPrice)
-                .sum();
+    public synchronized void decrementStock(int quantity) {
+        if (quantity > stock) {
+            throw new IllegalArgumentException("Niewystarczajaca ilosc w magazynie!");
+        }
+        stock -= quantity;
+    }
+
+    public synchronized void incrementStock(int quantity) {
+        stock += quantity;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder()
+                .append(String.format("Produkt: %s\n", name))
+                .append(String.format("ID: %d\n", id))
+                .append(String.format("Cena: %.2f zł\n", price))
+                .append(String.format("Stan magazynowy: %d\n", stock))
+                .append(String.format("Typ: %s\n", type != null ? type.name() : "Brak"));
+
+        return sb.toString();
     }
 }

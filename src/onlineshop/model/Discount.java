@@ -13,10 +13,6 @@ public class Discount {
         this.minimumOrderValue = minimumOrderValue;
     }
 
-    public String getCode() {
-        return code;
-    }
-
     public double getPercentage() {
         return percentage;
     }

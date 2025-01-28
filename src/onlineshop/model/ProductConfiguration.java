@@ -1,17 +1,17 @@
 package onlineshop.model;
 
 public class ProductConfiguration {
-    private String type;
+    private Type type;
     private String value;
     private double price;
 
-    public ProductConfiguration(String type, String value, double price) {
+    public ProductConfiguration(Type type, String value, double price) {
         this.type = type;
         this.value = value;
         this.price = price;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 

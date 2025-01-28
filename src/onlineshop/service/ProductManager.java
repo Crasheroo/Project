@@ -4,46 +4,45 @@ import onlineshop.exceptions.ProductOutOfStockException;
 import onlineshop.model.*;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ProductManager {
     private final List<Product> products = new ArrayList<>();
     private final Map<String, Discount> discountMap = new HashMap<>();
-    private final ExecutorService executorService = Executors.newFixedThreadPool(5);
 
     public ProductManager() {
         initializeDiscounts();
     }
 
     public void fillDefaultData() {
-        addProductAsync(new Computer(1, "Laptop gejmingowy", 10000, 2, ProcessorType.INTEL_I7, RamType.RAM_8GB));
-        addProductAsync(new Computer(2, "Ultrabook biznesowy", 8000, 3, ProcessorType.INTEL_I5, RamType.RAM_16GB));
+        List<ProductConfiguration> computerConfigurations = List.of(
+                new ProductConfiguration(Type.PROCESSOR, "Intel i5", 0),
+                new ProductConfiguration(Type.PROCESSOR, "Intel i7", 800),
+                new ProductConfiguration(Type.PROCESSOR, "Intel i9", 1200),
+                new ProductConfiguration(Type.RAM_SIZE, "8GB", 0),
+                new ProductConfiguration(Type.RAM_SIZE, "16GB", 500),
+                new ProductConfiguration(Type.RAM_SIZE, "32GB", 1000)
+        );
 
-        addProductAsync(new Smartphone(3, "Samsong Galaxy", 3000, 10, SmartphoneColors.black, 4500));
-        addProductAsync(new Smartphone(4, "iPhone 15", 7000, 5, SmartphoneColors.white, 5000));
+        List<ProductConfiguration> smartphoneConfigurations = List.of(
+                new ProductConfiguration(Type.COLOR, "Czarny", 0),
+                new ProductConfiguration(Type.COLOR, "Niebieski", 150),
+                new ProductConfiguration(Type.COLOR, "Zielony", 150),
+                new ProductConfiguration(Type.BATTERY_CAPACITY, "2200mAh", 0),
+                new ProductConfiguration(Type.BATTERY_CAPACITY, "3200mAh", 400),
+                new ProductConfiguration(Type.BATTERY_CAPACITY, "4200mAh", 800),
+                new ProductConfiguration(Type.ACCESSORY, "Słuchawki", 150),
+                new ProductConfiguration(Type.ACCESSORY, "Szybka ładowarka", 50),
+                new ProductConfiguration(Type.ACCESSORY, "Etui", 30),
+                new ProductConfiguration(Type.ACCESSORY, "Uchwyt", 45)
+        );
 
-        addProductAsync(new Electronics(5, "Telewizor 4K", 1200, 50));
-        addProductAsync(new Electronics(6, "Kamera internetowa", 250, 30));
+        List<ProductConfiguration> emptyConfiguration = new ArrayList<>();
+
+        products.add(new Product(1, "Computer", "Gaming PC", 3000.00, 10, computerConfigurations));
+        products.add(new Product(2, "Smartphone", "Smartphone Galaxy", 2000.00, 15, smartphoneConfigurations));
+        products.add(new Product(3, "Electronics", "Wireless Mouse", 25.99, 50, emptyConfiguration));
+        products.add(new Product(4, "Electronics", "Bluetooth Keyboard", 45.99, 30, emptyConfiguration));
     }
-
-    public void addProductAsync(Product product) {
-        executorService.submit(() -> {
-            products.add(product);
-            System.out.println("Produkt dodany: " + product);
-        });
-    }
-
-    public void removeProductAsync(int id) {
-        executorService.submit(() -> {
-            boolean removed = products.removeIf(product -> product.getId() == id);
-            if (!removed) {
-                throw new ProductOutOfStockException("Produkt o ID " + id + " nie istnieje");
-            }
-            System.out.println("Produkt usunięty: ID " + id);
-        });
-    }
-
 
     public void displayProducts() {
         if (products.isEmpty()) {
@@ -89,9 +88,5 @@ public class ProductManager {
 
     public List<Product> getProducts() {
         return products;
-    }
-
-    public Map<String, Discount> getDiscountMap() {
-        return discountMap;
     }
 }
